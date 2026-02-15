@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres:15
+    container_name: conflict_postgres
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
