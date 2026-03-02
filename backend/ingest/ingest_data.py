@@ -13,10 +13,11 @@ sys.path.append(str(Path(__file__).parents[1]))
 from database import engine
 
 
-def ingest_official_data(sheets):
+def ingest_officials_data(sheets):
     all_officials = []
 
     jurisdiction_df = pd.read_sql(text("SELECT id, jurisdiction_name FROM jurisdictions"), con=engine)
+
     for sheet_name, sheet_data in sheets.items():
         if "First Name" not in sheet_data.columns or "Last Name" not in sheet_data.columns or "Middle Name" not in sheet_data.columns:
             continue
@@ -42,6 +43,8 @@ def ingest_official_data(sheets):
                 all_officials.append(new_df)
     
     all_officials_df = pd.concat(all_officials, ignore_index=True)
+
+    # Currently drops people with the same first and last name, needs to be fixed.
     all_officials_df = all_officials_df.drop_duplicates(subset=['cleaned_name'])
 
     with engine.begin() as connection:
@@ -107,13 +110,18 @@ def get_sheets(file_path):
 
 def ingest_data(sheets):    
     ingest_jurisdiction_data(sheets)
-    ingest_official_data(sheets)
+    ingest_officials_data(sheets)
 
 
 if __name__ == "__main__":
     # path to data files
     file_path = Path(__file__).resolve().parent.parent.parent / "data"
 
+    # converts from excel to pandas dataframes
     sheets = get_sheets(file_path)
+
+    # optionally clean the dataframes, remove NaN values, etc.
     sheets = clean_sheets(sheets)
+
+    # ingests data into database
     ingest_data(sheets)
