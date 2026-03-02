@@ -34,10 +34,10 @@ def ingest_officials_data(sheets):
         new_df['last_name'] = sheet_data[["Last Name"]]
         new_df["middle_name"] = sheet_data["Middle Name"].fillna("")
         new_df = new_df.dropna(subset=['first_name', 'last_name'])
-        new_df["cleaned_name"] = new_df["first_name"].str.lower() + " " + new_df["middle_name"].str.lower() + " " + new_df["last_name"].str.lower() if new_df["middle_name"].str.lower() != "" else new_df["first_name"].str.lower() + " " + new_df["last_name"].str.lower()
+        new_df["cleaned_name"] = new_df["first_name"].str.lower() + " " + new_df["middle_name"].str.lower() + " " + new_df["last_name"].str.lower()
+        new_df["cleaned_name"] = new_df["cleaned_name"].str.replace(r'\s+', ' ', regex=True).str.strip()
         new_df["name_suffix"] = ""
         new_df["jurisdiction_id"] = sheet_data["id"]
-
 
         if new_df is not None:
                 all_officials.append(new_df)
