@@ -31,7 +31,7 @@ class Jurisdictions(Base):
     jurisdiction_name: Mapped[str] = mapped_column(String)
 
     # Relationships
-    officials: Mapped[List["Officials"]] = relationship(back_populates = "jurisdictions")
+    officials: Mapped[List["Officials"]] = relationship(back_populates = "jurisdiction")
 
 
 class Decisions(Base):

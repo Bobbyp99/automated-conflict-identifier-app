@@ -1,16 +1,8 @@
-import sys
-
-# install pandas
-# install openpyxl for reading excel files
 import pandas as pd
-
-
 from pathlib import Path
-
 from sqlalchemy import text
-
-sys.path.append(str(Path(__file__).parents[1]))
-from database import engine
+from backend.database import engine, SessionLocal
+from backend.models import Jurisdictions, Officials
 
 
 def ingest_officials_data(sheets):
@@ -51,7 +43,22 @@ def ingest_officials_data(sheets):
         existing_officials = pd.read_sql(text("SELECT cleaned_name FROM officials"), con=connection)
         existing_cleaned_names = set(existing_officials['cleaned_name'])
         new_officials_df = all_officials_df[~all_officials_df['cleaned_name'].isin(existing_cleaned_names)]
-        new_officials_df.to_sql("officials", con=connection, if_exists="append", index=False)
+
+        officials = new_officials_df.to_dict(orient='records')
+
+
+        with SessionLocal() as session:
+            for official in officials:
+                new_official = Officials(
+                    first_name=official['first_name'],
+                    last_name=official['last_name'],
+                    middle_name=official['middle_name'],
+                    cleaned_name=official['cleaned_name'],
+                    name_suffix=official['name_suffix'],
+                    jurisdiction_id=official['jurisdiction_id']
+                )
+                session.add(new_official)
+            session.commit()
 
 
 def ingest_jurisdiction_data(sheets):
@@ -74,7 +81,15 @@ def ingest_jurisdiction_data(sheets):
         existing_jurisdictions = pd.read_sql(text("SELECT jurisdiction_name FROM jurisdictions"), con=connection)
         existing_jurisdiction_names = set(existing_jurisdictions['jurisdiction_name'])
         new_jurisdictions_df = all_jurisdictions_df[~all_jurisdictions_df['jurisdiction_name'].isin(existing_jurisdiction_names)]
-        new_jurisdictions_df.to_sql("jurisdictions", con=connection, if_exists="append", index=False)
+
+        jurisdictions = new_jurisdictions_df.to_dict(orient='records')
+        with SessionLocal() as session:
+            for jurisdiction in jurisdictions:
+                new_jurisdiction = Jurisdictions(
+                    jurisdiction_name=jurisdiction['jurisdiction_name']
+                )
+                session.add(new_jurisdiction)
+            session.commit()
 
 
 def clean_sheets(sheets):
