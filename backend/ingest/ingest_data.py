@@ -1,142 +1,95 @@
 import pandas as pd
 from pathlib import Path
-from sqlalchemy import text
 from backend.database import engine, SessionLocal
 from backend.models import Jurisdictions, Officials
 
+def read_from_file(filepath: str, keyword: str) -> list[pd.Series]: # Reads from specified file a specified keyword.
+    series_list = [] # Returns a list of series, basically just columns of relevant data.
+    fixed_sheets = pd.read_excel(filepath, sheet_name=None) # Returns dictionary with (sheet_name, dataframe).
+    # It is the name of the sheet and the dataframe that corresponds to it.
 
-def ingest_officials_data(sheets):
-    all_officials = []
+    for sheet_name, df in fixed_sheets.items():
+        if keyword in df.columns:
+            series_list.append(df[keyword])
+        else:
+            mask = (df == keyword) # Create a dataframe where each cell contains boolean values, a row contains true if it contains the keyword.
+            keyword_column = df.columns[mask.any()] # Get the column of the row that contains the keyword.
+            column_name = keyword_column[0] # Identify what the column name is actually called, likely "Unamed: NUMBER"
+  
+            start_index = df[df[column_name] == keyword].index[0] # Gets row index 
+            start_pos = df.index.get_loc(start_index) # Gets the offset of start_index
 
-    jurisdiction_df = pd.read_sql(text("SELECT id, jurisdiction_name FROM jurisdictions"), con=engine)
+            values_below = df[column_name].iloc[start_pos + 1:] # Get the specified series, in this case the values below the keyword
 
-    for sheet_name, sheet_data in sheets.items():
-        if "First Name" not in sheet_data.columns or "Last Name" not in sheet_data.columns or "Middle Name" not in sheet_data.columns:
-            continue
-        
-        sheet_data = sheet_data.merge(
-        jurisdiction_df[['id', 'jurisdiction_name']], 
-        left_on="Agency", 
-        right_on="jurisdiction_name", 
-        how="left"
-        )
+            series_list.append(values_below)
 
-        new_df = pd.DataFrame()
-        new_df['first_name'] = sheet_data[["First Name"]]
-        new_df['last_name'] = sheet_data[["Last Name"]]
-        new_df["middle_name"] = sheet_data["Middle Name"].fillna("")
-        new_df = new_df.dropna(subset=['first_name', 'last_name'])
-        new_df["cleaned_name"] = new_df["first_name"].str.lower() + " " + new_df["middle_name"].str.lower() + " " + new_df["last_name"].str.lower()
-        new_df["cleaned_name"] = new_df["cleaned_name"].str.replace(r'\s+', ' ', regex=True).str.strip()
-        new_df["name_suffix"] = ""
-        new_df["jurisdiction_id"] = sheet_data["id"]
+    return series_list
 
-        if new_df is not None:
-                all_officials.append(new_df)
+def add_jurisdictions(filepath: str): # Add to DB
+    all_jurisdictions = read_from_file(filepath, "Agency")
     
-    all_officials_df = pd.concat(all_officials, ignore_index=True)
+    database_jurisdictions = pd.read_sql("SELECT * FROM jurisdictions", engine)["jurisdiction_name"]
 
-    # Currently drops people with the same first and last name, needs to be fixed.
-    all_officials_df = all_officials_df.drop_duplicates(subset=['cleaned_name'])
+    all_jurisdictions = pd.concat(all_jurisdictions, ignore_index=True)
+    all_jurisdictions = all_jurisdictions.astype(str).dropna().drop_duplicates()
 
-    with engine.begin() as connection:
-        existing_officials = pd.read_sql(text("SELECT cleaned_name FROM officials"), con=connection)
-        existing_cleaned_names = set(existing_officials['cleaned_name'])
-        new_officials_df = all_officials_df[~all_officials_df['cleaned_name'].isin(existing_cleaned_names)]
+    all_jurisdictions = all_jurisdictions[~all_jurisdictions.isin(database_jurisdictions)]
 
-        officials = new_officials_df.to_dict(orient='records')
-
-
-        with SessionLocal() as session:
-            for official in officials:
-                new_official = Officials(
-                    first_name=official['first_name'],
-                    last_name=official['last_name'],
-                    middle_name=official['middle_name'],
-                    cleaned_name=official['cleaned_name'],
-                    name_suffix=official['name_suffix'],
-                    jurisdiction_id=official['jurisdiction_id']
-                )
-                session.add(new_official)
-            session.commit()
-
-
-def ingest_jurisdiction_data(sheets):
-    all_jurisdictions = []
-    for sheet_name, sheet_data in sheets.items():
-        if "Agency" not in sheet_data.columns:
-            continue
-        new_df = pd.DataFrame()
-        new_df["jurisdiction_name"] = sheet_data["Agency"]
-        new_df = new_df.dropna(subset=['jurisdiction_name'])
-        new_df = new_df.drop_duplicates(subset=['jurisdiction_name'])
-
-        if new_df is not None:
-                all_jurisdictions.append(new_df)
+    with SessionLocal() as session:
         
-    all_jurisdictions_df = pd.concat(all_jurisdictions, ignore_index=True)
-    all_jurisdictions_df = all_jurisdictions_df.drop_duplicates(subset=['jurisdiction_name']) 
-    
-    with engine.begin() as connection:
-        existing_jurisdictions = pd.read_sql(text("SELECT jurisdiction_name FROM jurisdictions"), con=connection)
-        existing_jurisdiction_names = set(existing_jurisdictions['jurisdiction_name'])
-        new_jurisdictions_df = all_jurisdictions_df[~all_jurisdictions_df['jurisdiction_name'].isin(existing_jurisdiction_names)]
-
-        jurisdictions = new_jurisdictions_df.to_dict(orient='records')
-        with SessionLocal() as session:
-            for jurisdiction in jurisdictions:
-                new_jurisdiction = Jurisdictions(
-                    jurisdiction_name=jurisdiction['jurisdiction_name']
-                )
-                session.add(new_jurisdiction)
-            session.commit()
-
-
-def clean_sheets(sheets):
-    cleaned_sheets = {}
-
-    for sheet_name, sheet_data in sheets.items():
-
-        # modify all sheet data here, remove NaN values, etc.
+        for value in all_jurisdictions:
+            session.add(Jurisdictions(jurisdiction_name = value))
         
-        cleaned_sheets[sheet_name] = sheet_data
-    return cleaned_sheets
+        session.commit()
 
-# loads excel files from data/raw, returns a dictionary of sheet name to sheet data (as a pandas dataframe)
-def get_sheets(file_path):
+def add_officials(filepath: str): # Add to DB
+    all_first_names = read_from_file(filepath, "First Name")
+    all_middle_names = read_from_file(filepath, "Middle Name")
+    all_last_names = read_from_file(filepath, "Last Name")
+    all_agencies = read_from_file(filepath, "Agency")
 
-    excel_file_paths = list((file_path / "raw").glob("*.xlsx"))
+    for i in range(len(all_first_names)):
+        all_first_names[i] = all_first_names[i].astype(str).fillna("")
 
-    clean_sheets = {}
+    for i in range(len(all_middle_names)):
+        all_middle_names[i] = all_middle_names[i].astype(str).fillna("")
 
-    for excel_file_path in excel_file_paths:
+    for i in range(len(all_last_names)):
+        all_last_names[i] = all_last_names[i].astype(str).fillna("")
 
-        sheets = pd.read_excel(excel_file_path, sheet_name=None)
+    all_first_names = pd.concat(all_first_names, ignore_index=True)
+    all_middle_names = pd.concat(all_middle_names, ignore_index=True)
+    all_last_names = pd.concat(all_last_names, ignore_index=True)
+    all_agencies = pd.concat(all_agencies, ignore_index=True)
 
-        # Every excel file can have multiple tables
-        for sheet, sheet_data in sheets.items():
-            new_sheet_name = f"{excel_file_path.stem}_{sheet}"
+    combined_df = pd.DataFrame({"first_name": all_first_names, "middle_name": all_middle_names, "last_name": all_last_names, "Agency": all_agencies})
 
-            clean_sheets[new_sheet_name] = sheet_data
+    database_jurisdictions_df = pd.read_sql("SELECT * FROM jurisdictions", engine)
 
-    return clean_sheets
+    merge_df = pd.merge(database_jurisdictions_df, combined_df, left_on="jurisdiction_name", right_on="Agency", how="inner")
+    merge_df = merge_df.drop_duplicates().dropna()
+    merge_df["cleaned_name"] = merge_df["first_name"].str.lower() + merge_df["middle_name"].str.lower() + merge_df["last_name"].str.lower()
 
+    database_officials_df = pd.read_sql("SELECT * FROM officials", engine)
 
+    merge_df = merge_df[~merge_df['cleaned_name'].isin(database_officials_df["cleaned_name"])]
 
-def ingest_data(sheets):    
-    ingest_jurisdiction_data(sheets)
-    ingest_officials_data(sheets)
-
+    with SessionLocal() as session:
+        
+        for index, value in merge_df.iterrows():
+            session.add(Officials(  first_name = value["first_name"],
+                                    middle_name = value["middle_name"],
+                                    last_name = value["last_name"],
+                                    cleaned_name = value["cleaned_name"],
+                                    name_suffix = "",
+                                    jurisdiction_id = value["id"]))
+        
+        session.commit()
 
 if __name__ == "__main__":
     # path to data files
-    file_path = Path(__file__).resolve().parent.parent.parent / "data"
+    file_path = Path(__file__).resolve().parent.parent.parent / "data" / "raw"
 
-    # converts from excel to pandas dataframes
-    sheets = get_sheets(file_path)
-
-    # optionally clean the dataframes, remove NaN values, etc.
-    sheets = clean_sheets(sheets)
-
-    # ingests data into database
-    ingest_data(sheets)
+    for path in file_path.glob("*.xlsx"):
+        add_jurisdictions(str(path))
+        add_officials(str(path))
