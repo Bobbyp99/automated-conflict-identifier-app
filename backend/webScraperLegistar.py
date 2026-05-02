@@ -3,12 +3,12 @@ import time
 import csv
 from datetime import datetime, timedelta
 
-BASE_URL = "https://webapi.legistar.com/v1/sonoma-county"
-# base link for matters https://sonoma-county.legistar.com/gateway.aspx?m=l&id=/matter.aspx?key={MatterId}
-
 # --- CONFIG ---
-YEARS_BACK = 5
-CSV_FILE = "legistar_data1.csv"
+COUNTY_NAME = "sacramento"  # sonoma-county, sacramento, etc...
+API_URL = f"https://webapi.legistar.com/v1/{COUNTY_NAME}"
+SITE_LINK = f"https://{COUNTY_NAME}.legistar.com/gateway.aspx?m=l&id=/matter.aspx?key="
+CSV_FILE = "legistar_data2.csv"
+YEARS_BACK = 1
 SLEEP_SECONDS = 0.5
 
 def safe_get(url, max_retries=5):
@@ -41,7 +41,7 @@ def fetch_matters(cutoff):
 
     while True:
         url = (
-            f"{BASE_URL}/Matters"
+            f"{API_URL}/Matters"
             f"?$filter=MatterPassedDate ge datetime'{cutoff.year}-{cutoff.month:02d}-{cutoff.day:02d}'"
             f"&$top={page_size}&$skip={skip}"
         )
@@ -59,12 +59,12 @@ def fetch_matters(cutoff):
     return all_matters
 
 def get_matter_history(matter_id):
-    url = f"{BASE_URL}/Matters/{matter_id}/Histories"
+    url = f"{API_URL}/Matters/{matter_id}/Histories"
     return safe_get(url)
 
 def get_matter_text(matter_id):
     # 1. Get versions
-    url = f"{BASE_URL}/Matters/{matter_id}/Versions"
+    url = f"{API_URL}/Matters/{matter_id}/Versions"
     versions = safe_get(url)
 
     if not versions or not isinstance(versions, list):
@@ -76,7 +76,7 @@ def get_matter_text(matter_id):
         return {}
 
     # 3. Get text using the key
-    url = f"{BASE_URL}/Matters/{matter_id}/Texts/{key}"
+    url = f"{API_URL}/Matters/{matter_id}/Texts/{key}"
     return safe_get(url)
 
 
@@ -106,6 +106,28 @@ def get_names(matter_text):
         return found_names
     return []
 
+def get_votes(hist_event_id, guid):
+    url = f"{API_URL}/Events/{hist_event_id}/EventItems"
+    events = safe_get(url)
+    event_item_id = 0
+
+    if not events or not isinstance(events, list):
+        return {}
+
+    for event in events:
+        if event.get("EventItemGuid") == guid:
+            event_item_id = event.get("EventItemId")
+            url = f"{API_URL}/EventItems/{event_item_id}/Votes"
+        else:
+            continue
+    votes = safe_get(url)
+    names = []
+
+    for vote in votes:
+        names.append(vote.get("VotePersonName"))
+
+    return names
+
 def csv_writer(file_name):
     with open(file_name, "a", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
@@ -116,56 +138,69 @@ def csv_writer(file_name):
                          "Status",
                          "Date",
                          "Movers",
+                         "Voters"
                          "Staff Names",
                          "Link"])
         extract_data(writer)
 
-def extract_data(csv, years_back=YEARS_BACK):
+def extract_data(csv_file, years_back=YEARS_BACK):
     cutoff = datetime.now() - timedelta(days=365 * years_back)
 
     for matter in fetch_matters(cutoff):
         matter_id = matter.get("MatterId")
         title = matter.get("MatterTitle")
         matter_file = matter.get("MatterFile")
-        matter_status = matter.get("MatterStatusName")
         matter_text = get_matter_text(matter_id)
         staff_names = get_names(matter_text.get("MatterTextPlain"))
         try:
             history = get_matter_history(matter_id)
+
         except Exception as e:
             print(f"Error fetching history for {matter_id}: {e}")
             continue
 
         for h in history:
+            matter_history_guid = h.get("MatterHistoryGuid")
+            matter_history_event_id = h.get("MatterHistoryEventId")
+
+            vote_names = get_votes(matter_history_event_id, matter_history_guid)
+
             action = h.get("MatterHistoryActionName")
             action_date = h.get("MatterHistoryActionDate")
+            status = h.get("MatterHistoryPassedFlagName")
             mover_name = h.get("MatterHistoryMoverName")
-            seconder_name = h.get("MatterHistorySecondName")
+            seconder_name = h.get("MatterHistorySeconderName")
 
             print("\n==============================")
             print("File: ", matter_file)
             print("Title:", title)
             print("Action:", action)
-            print("Status:", matter_status)
+            print("Status:", status)
             print("Date:", action_date)
             print(f"Mover: {mover_name}, Seconder: {seconder_name}", )
-            print("Staff Names: ", end="")
+            print("Voters: ", end="")
+
+            for vote in vote_names:
+                print(f"{vote}, ", end="")
+
+            print("\nStaff Names: ", end="")
             if staff_names:
                 for name in staff_names:
                     print(f"{name}, ", end="")
             else:
                 print("None")
 
-            print(f"\nLink: https://sonoma-county.legistar.com/gateway.aspx?m=l&id=/matter.aspx?key={matter_id}")
+            print(f"\nLink: {SITE_LINK}{matter_id}")
 
-            csv.writerow([matter_file,
-                          title,
-                          action,
-                          matter_status,
-                          action_date,
-                          f"{mover_name}, {seconder_name}",
-                          staff_names,
-                          f"https://sonoma-county.legistar.com/gateway.aspx?m=l&id=/matter.aspx?key={matter_id}"])
+            csv_file.writerow([matter_file,
+                title,
+                action,
+                status,
+                action_date,
+                f"{mover_name}, {seconder_name}",
+                vote_names,
+                staff_names,
+                f"{SITE_LINK}{matter_id}"])
 
         time.sleep(SLEEP_SECONDS)
 
