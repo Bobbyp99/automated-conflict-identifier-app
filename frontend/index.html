@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FPPC Conflict Analyzer</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="seal">⚖️</div>
+      <div>
+        <div class="h-title">FPPC Conflict Analyzer</div>
+        <div class="h-sub">Fair Political Practices Commission · Conflict of Interest Tool</div>
+      </div>
+    </div>
+    <div class="h-meta" id="h-meta">
+      FastAPI + SQLAlchemy backend<br>SQLite database
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="tabs">
+    <div class="tab active" data-tab="analyze">Analyze</div>
+    <div class="tab" data-tab="history">Past Runs</div>
+  </nav>
+
+  <!-- Analyze Panel -->
+  <div class="tab-panel" data-panel="analyze">
+
+    <!-- Step 1: Upload -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">Step 01</span>
+        <span class="card-title">Upload CSV Files</span>
+        <span class="card-done hidden" id="step1-done">✓ Both files loaded</span>
+      </div>
+      <div class="card-body">
+        <div class="upload-grid">
+
+          <label class="upload-zone" id="zone-i" for="fi"
+            ondragover="this.classList.add('drag-over');event.preventDefault()"
+            ondragleave="this.classList.remove('drag-over')"
+            ondrop="this.classList.remove('drag-over');event.preventDefault();handleUpload('interests',event.dataTransfer.files[0])">
+            <input type="file" id="fi" accept=".csv">
+            <div class="upload-icon">📋</div>
+            <div class="upload-label">Disclosed Interests</div>
+            <div class="upload-desc">Form 700 / financial interests CSV</div>
+            <div class="upload-file" id="fn-i"></div>
+            <div class="upload-count" id="fc-i"></div>
+          </label>
+
+          <label class="upload-zone" id="zone-v" for="fv"
+            ondragover="this.classList.add('drag-over');event.preventDefault()"
+            ondragleave="this.classList.remove('drag-over')"
+            ondrop="this.classList.remove('drag-over');event.preventDefault();handleUpload('votes',event.dataTransfer.files[0])">
+            <input type="file" id="fv" accept=".csv">
+            <div class="upload-icon">🗳️</div>
+            <div class="upload-label">Voting / Decisions</div>
+            <div class="upload-desc">Board minutes / agenda items CSV</div>
+            <div class="upload-file" id="fn-v"></div>
+            <div class="upload-count" id="fc-v"></div>
+          </label>
+
+        </div>
+        <div class="err" id="upload-err"></div>
+      </div>
+    </div>
+
+    <!-- Step 2: Column Mapping + Run -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">Step 02</span>
+        <span class="card-title">Map Columns &amp; Analyze</span>
+        <span class="card-done hidden" id="step2-done">✓ Analysis complete</span>
+      </div>
+      <div class="card-body hidden" id="mapping-body">
+        <div class="col-grid">
+          <div>
+            <p style="font-size:11px;color:var(--amber);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">Interests file</p>
+            <div class="field">
+              <label>Employee name column</label>
+              <select id="ci-emp"></select>
+            </div>
+            <div class="field">
+              <label>Entity / org name column</label>
+              <select id="ci-ent"></select>
+            </div>
+            <div class="field">
+              <label>Investment type (optional)</label>
+              <select id="ci-type"></select>
+            </div>
+          </div>
+          <div>
+            <p style="font-size:11px;color:var(--amber);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">Votes file</p>
+            <div class="field">
+              <label>Employee name column</label>
+              <select id="cv-emp"></select>
+            </div>
+            <div class="field">
+              <label>Subject / matter column</label>
+              <select id="cv-sub"></select>
+            </div>
+            <div class="field">
+              <label>Date column (optional)</label>
+              <select id="cv-date"></select>
+            </div>
+          </div>
+        </div>
+        <div class="err" id="analyze-err"></div>
+        <button class="btn btn-primary btn-full" id="run-btn">Run conflict analysis</button>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="results-area" class="hidden">
+      <div class="stats-bar" id="stats-bar"></div>
+      <div class="filter-row">
+        <input type="text" id="f-search" placeholder="Search employee, entity, or subject…">
+        <select id="f-level">
+          <option value="">All likelihood levels</option>
+          <option value="High">High only</option>
+          <option value="Medium">Medium only</option>
+          <option value="Low">Low only</option>
+        </select>
+        <select id="f-emp">
+          <option value="">All employees</option>
+        </select>
+      </div>
+      <div class="results-header">
+        <span class="results-title">Potential conflicts</span>
+        <span class="results-count" id="r-count"></span>
+      </div>
+      <div class="match-list" id="match-list"></div>
+    </div>
+
+  </div><!-- /analyze panel -->
+
+  <!-- History Panel -->
+  <div class="tab-panel hidden" data-panel="history">
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">Past Analysis Runs</span>
+      </div>
+      <div class="card-body">
+        <p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">
+          All runs are persisted in the SQLite database. Click any run to reload its results.
+        </p>
+        <div id="history-list"><div class="empty">Loading…</div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+<script src="/static/js/app.js"></script>
+</body>
+</html>
