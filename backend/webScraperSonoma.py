@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 COUNTY_NAME    = "sonoma-county"
 API_URL        = f"https://webapi.legistar.com/v1/{COUNTY_NAME}"
 SITE_LINK      = f"https://sonoma-county.legistar.com/gateway.aspx?m=l&id=/matter.aspx?key="
-CSV_FILE       = "decisions_test2.csv"
+CSV_FILE       = "decisions_test3.csv"
 YEARS_BACK     = 5
 SLEEP_SECONDS  = 0.5
 
@@ -75,9 +75,10 @@ def fetch_matters(cutoff):
 
 def fetch_matter_text(matter_id, matter_guid):
     """
-    Scrapes the legislation detail web page for the matter body text.
+    Scrapes the full matter body text from the legislation detail web page.
     The /Matters/{id}/Texts API endpoint returns 405 for Sonoma County.
-    Staff names live in the Text tab of the detail page.
+    Anchors on 'To: Sonoma County' or 'Department or Agency' to find the
+    start of the body, then returns up to 8000 chars of plain text.
     """
     if not matter_guid:
         return ""
@@ -90,13 +91,22 @@ def fetch_matter_text(matter_id, matter_guid):
         if not resp.ok:
             return ""
         html = resp.text
-        m = re.search(r'Staff Names? and Phone Numbers?', html, re.IGNORECASE)
-        if not m:
+
+        # Find the start of the matter body using common Sonoma County anchors
+        anchor = re.search(
+            r'(To:\s*Sonoma County|Department or Agency Name|Staff Name)',
+            html, re.IGNORECASE
+        )
+        if not anchor:
             return ""
-        # Grab a window of HTML from that point, strip tags, collapse whitespace
-        chunk = html[m.start(): m.start() + 600]
-        plain = re.sub(r'<[^>]+>', ' ', chunk)
-        plain = re.sub(r'&[a-z]+;', ' ', plain)   # strip HTML entities
+
+        # Walk back to the nearest tag boundary so we don't clip mid-tag
+        start = html.rfind('<', 0, anchor.start())
+        start = start if start != -1 else anchor.start()
+
+        chunk = html[start: start + 8000]
+        plain = re.sub(r'<[^>]+>', ' ', chunk)          # strip HTML tags
+        plain = re.sub(r'&#?\w+;', ' ', plain)           # strip HTML entities
         plain = re.sub(r'\s+', ' ', plain).strip()
         return plain
     except requests.exceptions.RequestException:
@@ -106,29 +116,70 @@ def fetch_matter_text(matter_id, matter_guid):
 def extract_staff_names(text):
     """
     Parse 'Staff Name and Phone Number: Alice, Bob, (707) 555-1234'
-    from matter text and return a list of name strings only.
+    or   'Staff Name and Phone Number: Alice, Dept 707-565-8058; Bob, Dept 707-565-4777'
+    Returns a list of name strings only, dropping phone numbers and departments.
     """
     if not text:
         return []
     match = re.search(
-        r'Staff Names? and Phone Numbers?:\s*(.+?)(?:\r?\n|$)',
+        r'Staff Names? and Phone Numbers?:\s*(.+?)(?=\s{2,}|\|[A-Z]|$)',
         text, re.IGNORECASE
     )
     if not match:
         return []
+
     raw = match.group(1).strip()
-    parts = [p.strip() for p in raw.split(',')]
+    # Split on semicolons first (separates entries like "Name, Dept Phone; Name, Dept Phone")
+    entries = [e.strip() for e in raw.split(';')]
     names = []
-    for part in parts:
-        # Drop phone numbers like (707) 565-2431 or 707-565-2431
-        if re.search(r'\(?\d{3}\)?[\s.\-]\d{3}[\s.\-]\d{4}', part):
-            continue
-        # Drop anything starting with a digit (extension numbers, etc.)
-        if re.match(r'^\d', part):
-            continue
-        if part:
-            names.append(part)
+    for entry in entries:
+        # The name is the first comma-separated token in each entry
+        parts = [p.strip() for p in entry.split(',')]
+        for part in parts:
+            if re.search(r'\d{3}[\s.\-]\d{3}[\s.\-]\d{4}', part):
+                break   # phone number reached — rest of this entry is noise
+            if re.match(r'^\d', part):
+                break
+            # Skip obvious department/agency words (all caps or known keywords)
+            if re.match(r'^(General Services|Emergency|Planning|County|Department)', part, re.IGNORECASE):
+                break
+            if part:
+                names.append(part)
     return names
+
+
+def extract_relevant_parties(text):
+    """
+    Extract applicant, property owner, contractor, lessor, and similar parties
+    from the matter body text. These are the entities officials voted on behalf of,
+    which are the primary subjects for conflict-of-interest matching.
+    """
+    if not text:
+        return []
+
+    # Ordered by how commonly they appear in Sonoma County matters
+    field_patterns = [
+        r'Applicants?:\s*([^;\n]+)',
+        r'Property Owners?:\s*([^;\n]+)',
+        r'Contractors?:\s*([^;\n]+)',
+        r'Vendors?:\s*([^;\n]+)',
+        r'Lessors?:\s*([^;\n]+)',
+        r'Lessees?:\s*([^;\n]+)',
+        r'Petitioners?:\s*([^;\n]+)',
+        r'Permittees?:\s*([^;\n]+)',
+        r'Owners?:\s*([^;\n]+)',
+        r'Grantees?:\s*([^;\n]+)',
+    ]
+
+    parties = []
+    for pattern in field_patterns:
+        m = re.search(pattern, text, re.IGNORECASE)
+        if m:
+            value = m.group(1).strip().rstrip('.,;')
+            # Sanity-check: skip if it looks like a sentence rather than a name
+            if value and len(value) < 150 and value not in parties:
+                parties.append(value)
+    return parties
 
 
 def get_final_action(matter_id):
@@ -192,9 +243,7 @@ def scrape():
             "Final Action Date",
             "Final Action",
             "Result",
-            "Staff Names",
-            "Mover",
-            "Seconder",
+            "Relevant Parties",
             "Voters",
             "Link",
         ])
@@ -218,17 +267,15 @@ def scrape():
                 action_date = (final.get("MatterHistoryActionDate") or "")[:10]
                 action      = final.get("MatterHistoryActionName", "")
                 result      = final.get("MatterHistoryPassedFlagName", "")
-                mover       = final.get("MatterHistoryMoverName", "")
-                seconder    = final.get("MatterHistorySeconderName", "")
                 voters      = get_voters(final, matter_id)
             else:
-                action_date = action = result = mover = seconder = ""
+                action_date = action = result = ""
                 voters = []
 
-            text        = fetch_matter_text(matter_id, matter_guid)
-            staff_names = extract_staff_names(text)
+            text             = fetch_matter_text(matter_id, matter_guid)
+            relevant_parties = extract_relevant_parties(text)
 
-            print(f"  Action: {action} | Result: {result} | Voters: {len(voters)} | Staff: {staff_names}")
+            print(f"  Action: {action} | Result: {result} | Voters: {len(voters)} | Parties: {relevant_parties}")
 
             writer.writerow([
                 file_num,
@@ -239,9 +286,7 @@ def scrape():
                 action_date,
                 action,
                 result,
-                ", ".join(staff_names),
-                mover,
-                seconder,
+                ", ".join(relevant_parties),
                 ", ".join(voters),
                 link,
             ])
