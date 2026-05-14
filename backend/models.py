@@ -1,82 +1,48 @@
-from sqlalchemy import String, Float, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import List
-from backend.database import Base
-
-class Officials(Base):
-    __tablename__ = "officials"
-
-    #id = Column(Integer, primary_key=True, index=True)
-    #first_name = Column(String)
-    id: Mapped[int] = mapped_column(primary_key = True) # do once for each table
-    jurisdiction_id: Mapped[int] = mapped_column(ForeignKey("jurisdictions.id"))
-
-    first_name: Mapped[str] = mapped_column(String)
-    last_name: Mapped[str] = mapped_column(String)
-    middle_name: Mapped[str] = mapped_column(String)
-    name_suffix: Mapped[str] = mapped_column(String)
-
-    cleaned_name: Mapped[str] = mapped_column(String)  # this will be all lowercase for easier fuzzy search implementation
-
-    # Relationships
-    jurisdiction: Mapped["Jurisdictions"] = relationship(back_populates = "officials")
+from datetime import datetime
+from sqlalchemy import Column, Integer, String, DateTime, Text, create_engine
+from sqlalchemy.orm import DeclarativeBase
 
 
-class Jurisdictions(Base):
-    __tablename__ = "jurisdictions"
-
-    id: Mapped[int] = mapped_column(primary_key = True) 
+class Base(DeclarativeBase):
+    pass
 
 
-    jurisdiction_name: Mapped[str] = mapped_column(String)
+class ScanJob(Base):
+    """Tracks the state of one background conflict scan."""
+    __tablename__ = "scan_jobs"
 
-    # Relationships
-    officials: Mapped[List["Officials"]] = relationship(back_populates = "jurisdictions")
-
-
-class Decisions(Base):
-    __tablename__ = "decisions"
-
-    id: Mapped[int] = mapped_column(primary_key = True)
-    jurisdiction_id: Mapped[int] = mapped_column(ForeignKey("jurisdictions.id"))
-
-    decision_date: Mapped[str] = mapped_column(String)
-    title: Mapped[str] = mapped_column(String)
-    decision_url: Mapped[str] = mapped_column(String)  # client mentioned we might want to include the URL in output 
-
-    # Relationships
+    id           = Column(String, primary_key=True)   # UUID
+    status       = Column(String, default="pending")   # pending / running / done / error
+    total        = Column(Integer, default=0)          # unique matter URLs to scan
+    processed    = Column(Integer, default=0)          # matters fetched so far
+    flagged      = Column(Integer, default=0)          # conflicts written so far
+    created_at   = Column(DateTime, default=datetime.utcnow)
+    completed_at = Column(DateTime, nullable=True)
+    error_msg    = Column(Text, nullable=True)
 
 
-class DecisionParticipants(Base):
-     __tablename__ = "decision_participants"
+class ConflictResult(Base):
+    """One flagged conflict — mirrors the columns in flagged_conflicts.csv."""
+    __tablename__ = "conflict_results"
 
-     id: Mapped[int] = mapped_column(primary_key = True)
-
-     name_raw: Mapped[str] = mapped_column(String)
-
-
-
-# This table will actually estimate whether or not a participant is an official 
-# dedicated folder of python files for this, but only after ingestion of data into database
-class ParticipantMatch(Base):
-    __tablename__ = "participant_matches"
-	 
-    id: Mapped[int] = mapped_column(primary_key = True)
-    match_score: Mapped[float] = mapped_column(Float)
-
-
-class ConflictFlag(Base):
-    __tablename__ = "conflict_flags"
-
-    id: Mapped[int] = mapped_column(primary_key = True)
-    officials_id: Mapped[int] = mapped_column(ForeignKey("officials.id"))
-
-    # we will store the explanation of the match (x official, y decision on date, z source of income year))
-    explanation: Mapped[str] = mapped_column(String)
-
-    
+    id                = Column(Integer, primary_key=True)
+    job_id            = Column(String, index=True)
+    official_name     = Column(String)
+    vote_outcome      = Column(String)
+    file_number       = Column(String)
+    subject           = Column(Text)
+    vote_date         = Column(String)
+    meeting_type      = Column(String)
+    overall_result    = Column(String)
+    entity_matched    = Column(String)
+    interest_schedule = Column(String)
+    interest_year     = Column(String)
+    link              = Column(String)
 
 
+def get_engine(db_url: str = "sqlite:///./fppc.db"):
+    return create_engine(db_url, connect_args={"check_same_thread": False})
 
 
-
+def init_db(engine):
+    Base.metadata.create_all(engine)
