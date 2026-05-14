@@ -1,6 +1,426 @@
-official_name,jurisdiction,income_source
-Alice Example,Santa Ana,National Fitness Campaign
-Bob Example,Santa Ana,Ryan Shifflett
-Charlie Example,Santa Ana,AT&T
-Dana Example,Santa Ana,Apple
-Evan Example,Santa Ana,Police K-9
+Official Name,Filing Year,Filing Type,Schedule,Name of Business Entity or Source,Fair Market Value,Nature of Investment or Interest
+Susan Gorin,2024,Annual,A1 - Publicly Traded Investment,DXC (DXC Technology Co),"$2,000 - $10,000",Stock
+Susan Gorin,2024,Annual,A1 - Publicly Traded Investment,HPE (Hewlett Packard Enterprises Company),"$10,001 - $100,000",Stock
+Susan Gorin,2024,Annual,A1 - Publicly Traded Investment,HPQ (HP Inc),"$100,001 - $1,000,000",Stock
+Susan Gorin,2024,Annual,A1 - Publicly Traded Investment,KEYS (Keysight Technologies Inc.),"$100,001 - $1,000,000",Stock
+Susan Gorin,2024,Annual,A1 - Publicly Traded Investment,MFGP (Micro Focus International),"$2,000 - $10,000",Stock
+Susan Gorin,2024,Annual,A1 - Publicly Traded Investment,PRSP (Perspecta Inc.),"$2,000 - $10,000",Stock
+Susan Gorin,2024,Annual,D - Gift,Sonoma County Economic Development Board,$55,tickets to anual economic breakfast
+Susan Gorin,2024,Annual,D - Gift,Sonoma Valley Education Foundation,$65,Ticket for Red and White Ball event
+Susan Gorin,2023,Annual,A1 - Publicly Traded Investment,DXC (DXC Technology Co),"$2,000 - $10,000",Stock
+Susan Gorin,2023,Annual,A1 - Publicly Traded Investment,HPE (Hewlett Packard Enterprises Company),"$10,001 - $100,000",Stock
+Susan Gorin,2023,Annual,A1 - Publicly Traded Investment,HPQ (HP Inc),"$100,001 - $1,000,000",Stock
+Susan Gorin,2023,Annual,A1 - Publicly Traded Investment,KEYS (Keysight Technologies Inc.),"$100,001 - $1,000,000",Stock
+Susan Gorin,2023,Annual,A1 - Publicly Traded Investment,MFGP (Micro Focus International),"$2,000 - $10,000",Stock
+Susan Gorin,2023,Annual,A1 - Publicly Traded Investment,PRSP (Perspecta Inc.),"$2,000 - $10,000",Stock
+Susan Gorin,2023,Annual,D - Gift,Sonoma County Economic Development Board,$70,ticket to annual economic breakfast
+Susan Gorin,2023,Annual,D - Gift,Los Cien,$60,ticket to annual State of the Latino County half day event
+Susan Gorin,2023,Annual,D - Gift,Sonoma International Film Festival,$400,"""Cinema Only"" pass to Sonoma International Film Festival"
+Susan Gorin,2023,Annual,D - Gift,Community Child Care Council (4cs) of Sonoma County,$75,ticket for annual Champions for Children luncheon
+Susan Gorin,2022,Annual,A1 - Publicly Traded Investment,DXC (DXC Technology Co),"$2,000 - $10,000",Stock
+Susan Gorin,2022,Annual,A1 - Publicly Traded Investment,HPE (Hewlett Packard Enterprises Company),"$10,001 - $100,000",Stock
+Susan Gorin,2022,Annual,A1 - Publicly Traded Investment,HPQ (HP Inc),"$100,001 - $1,000,000",Stock
+Susan Gorin,2022,Annual,A1 - Publicly Traded Investment,KEYS (Keysight Technologies Inc.),"$100,001 - $1,000,000",Stock
+Susan Gorin,2022,Annual,A1 - Publicly Traded Investment,MFGP (Micro Focus International),"$2,000 - $10,000",Stock
+Susan Gorin,2022,Annual,A1 - Publicly Traded Investment,PRSP (Perspecta Inc.),"$2,000 - $10,000",Stock
+Susan Gorin,2022,Annual,D - Gift,Sonoma Valley Film Society DBA Sonoma International Film Festival,$400,Cinema Only pass for film festival
+Susan Gorin,2022,Annual,D - Gift,Patrick Emery,$200,Ticket to Sonoma County Harvest Fair Awards Dinner
+Susan Gorin,2021,Annual,A1 - Publicly Traded Investment,KEYS (Keysight Technologies Inc.),"$100,001 - $1,000,000",Stock
+Susan Gorin,2021,Annual,A1 - Publicly Traded Investment,MFGP (Micro Focus International),"$2,000 - $10,000",Stock
+Susan Gorin,2021,Annual,A1 - Publicly Traded Investment,HPE (Hewlett Packard Enterprises Company),"$10,001 - $100,000",Stock
+Susan Gorin,2021,Annual,A1 - Publicly Traded Investment,PRSP (Perspecta Inc.),"$2,000 - $10,000",Stock
+Susan Gorin,2021,Annual,A1 - Publicly Traded Investment,DXC (DXC Technology Co),"$2,000 - $10,000",Stock
+Susan Gorin,2021,Annual,A1 - Publicly Traded Investment,HPQ (HP Inc),"$100,001 - $1,000,000",Stock
+Susan Gorin,2020,Annual,A1 - Publicly Traded Investment,KEYS (Keysight Technologies Inc.),"$100,001 - $1,000,000",Stock
+Susan Gorin,2020,Annual,A1 - Publicly Traded Investment,MFGP (Micro Focus International),"$2,000 - $10,000",Stock
+Susan Gorin,2020,Annual,C - Income Source,Workforce Logiq,"$10,001 - $100,000",Spouse's or registered domestic partner's income
+Susan Gorin,2020,Annual,D - Gift,Sonoma County Farm Bureau,$125,ticket
+Susan Gorin,2019,Annual,A1 - Publicly Traded Investment,KEYS (Keysight Technologies Inc.),"$100,001 - $1,000,000",Stock
+Susan Gorin,2019,Annual,A1 - Publicly Traded Investment,MFGP (Micro Focus International),"$2,000 - $10,000",Stock
+Susan Gorin,2019,Annual,C - Income Source,Workforce Logiq,"$10,001 - $100,000",Spouse's or registered domestic partner's income
+Susan Gorin,2019,Annual,D - Gift,Sonoma County Farm Bureau,$125,ticket
+Susan Gorin,2019,Annual,D - Gift,Pet's Lifeline,$95,ticket
+Susan Gorin,2019,Annual,D - Gift,California Emergency Operations Services,$78.3,Lunch
+Susan Gorin,2019,Annual,D - Gift,Gary Sapperstein,$50,ticket
+Susan Gorin,2019,Annual,D - Gift,"10,000 Degrees",$150,ticket
+Susan Gorin,2019,Annual,D - Gift,Jacobs Levy Equity Management,$99.95,Chocolate
+Susan Gorin,2018,Annual,A1 - Publicly Traded Investment,MFGP (Micro Focus International),"$2,000 - $10,000",Stock
+Susan Gorin,2018,Annual,A1 - Publicly Traded Investment,HPQ (HP Inc.),"$10,001 - $100,000",Stock
+Susan Gorin,2018,Annual,A1 - Publicly Traded Investment,HPE (Hewlett Packard Enterprises Company),"$10,001 - $100,000",Stock
+Susan Gorin,2018,Annual,A1 - Publicly Traded Investment,KEYS (Keysight Technologies Inc.),"$100,001 - $1,000,000",Stock
+Susan Gorin,2018,Annual,A1 - Publicly Traded Investment,PRSP (Perspecta Inc.),"$2,000 - $10,000",Stock
+Susan Gorin,2018,Annual,C - Income Source,Workforce Logiq,"$10,001 - $100,000",Spouse's or registered domestic partner's income
+Susan Gorin,2018,Annual,D - Gift,Tito Sasaki,$75,Ticket
+Susan Gorin,2018,Annual,D - Gift,Sonoma Valley Vintners & Growers,$470,Ticket
+Susan Gorin,2018,Annual,D - Gift,Press Democrat,$270,Tickets
+Susan Gorin,2018,Annual,D - Gift,Whitney Evans,$250,Ticket
+Susan Gorin,2018,Annual,D - Gift,Bohemian Grove,$100,Lunch
+Susan Gorin,2018,Annual,D - Gift,Sonoma County Winegrowers,$100,Ticket
+Susan Gorin,2018,Annual,D - Gift,Safari West,$50,Ticket
+David Rabbitt,2025,Annual,C - Income Source,Association of Bay Area Governments,"$1,001 - $10,000",Other
+David Rabbitt,2025,Annual,C - Income Source,CA  Alfred E. Alquist Seismic Safety Commission,"$500 - $1,000",Other
+David Rabbitt,2025,Annual,C - Income Source,SF Conservation & Development Commission,,Other
+David Rabbitt,2025,Annual,C - Income Source,Golden Gate Bridge Highway Transportation District,"$1,001 - $10,000",Other
+David Rabbitt,2025,Annual,C - Income Source,Sonoma-Marin Area Rail Transit,"$500 - $1,000",Other
+David Rabbitt,2025,Annual,C - Income Source,Association of Bay Area Governments,"$1,001 - $10,000",Other
+David Rabbitt,2025,Annual,C - Income Source,CA Alfred E. Alquist Seismic Safety Commission,"$500 - $1,000",Other
+David Rabbitt,2025,Annual,C - Income Source,Golden Gate Bridge Highway Transportation District,"$1,001 - $10,000",Other
+David Rabbitt,2025,Annual,C - Income Source,Metropolitan Transportation Commission,"$1,001 - $10,000",Other
+David Rabbitt,2025,Annual,C - Income Source,SF Conservation &Development Commission,,Other
+David Rabbitt,2025,Annual,C - Income Source,Sonoma-Marin Area Rail Transit,"$500 - $1,000",Other
+David Rabbitt,2025,Annual,D - Gift,Beretta Dairy,$330.0,2 Tickets
+David Rabbitt,2025,Annual,D - Gift,California State Association of Counties,$26.02,Calif Caucus Mtg
+David Rabbitt,2025,Annual,D - Gift,California State Association of Counties,$42.03,CA Delegation Recp
+David Rabbitt,2025,Annual,D - Gift,Exchange Bank,$550.0,2 Tickets
+David Rabbitt,2024,Annual,C - Income Source,Association of Bay Area Governments,"$1,001 - $10,000",Other
+David Rabbitt,2024,Annual,C - Income Source,CA Alfred E. Alquist Seismic Safety Commission,"$500 - $1,000",Other
+David Rabbitt,2024,Annual,C - Income Source,Golden Gate Bridge Highway Transportation District,"$1,001 - $10,000",Other
+David Rabbitt,2024,Annual,C - Income Source,Metropolitan Transportation Commission,"$1,001 - $10,000",Other
+David Rabbitt,2024,Annual,C - Income Source,SF Conservation &Development Commission,,Other
+David Rabbitt,2024,Annual,C - Income Source,Sonoma-Marin Area Rail Transit,"$500 - $1,000",Other
+David Rabbitt,2024,Annual,D - Gift,Tesconi Event & Management Solutions,$165.0,1 ticket
+David Rabbitt,2024,Annual,D - Gift,Exchange Bank,$350.0,2 tickets
+David Rabbitt,2024,Annual,D - Gift,Children's Museum of Sonoma County,$60.0,1 admission
+David Rabbitt,2024,Annual,D - Gift,Northern California Engineering Contractors Assoc,$60.0,1 admission
+David Rabbitt,2024,Annual,D - Gift,Jennifer Buffo,$75.0,1 ticket
+David Rabbitt,2023,Annual,C - Income Source,Association of Bay Area Governments,"$1,001 - $10,000",Other
+David Rabbitt,2023,Annual,C - Income Source,CA Alfred E. Alquist Seismic Safety Commission,"$500 - $1,000",Other
+David Rabbitt,2023,Annual,C - Income Source,Golden Gate Bridge Highway Transportation District,"$1,001 - $10,000",Other
+David Rabbitt,2023,Annual,C - Income Source,Metropolitan Transportation Commission,"$1,001 - $10,000",Other
+David Rabbitt,2023,Annual,C - Income Source,SF Conservation &Development Commission,,Other
+David Rabbitt,2023,Annual,C - Income Source,Sonoma-Marin Area Rail Transit,"$500 - $1,000",Other
+David Rabbitt,2023,Annual,D - Gift,Dayna Ghiradelli,$300.0,2 tickets
+David Rabbitt,2023,Annual,D - Gift,Northern California Engineering Contractors Assoc,$55.0,1 ticket
+David Rabbitt,2023,Annual,D - Gift,Les Perry,$300.0,2 tickets
+David Rabbitt,2023,Annual,D - Gift,John Bly,$150.0,1 ticket
+David Rabbitt,2023,Annual,D - Gift,Carle Libarie,$150.0,2 tickets
+David Rabbitt,2023,Annual,C - Income Source,Association of Bay Area Governments,"$1,001 - $10,000",Other
+David Rabbitt,2023,Annual,C - Income Source,CA Alfred E. Alquist Seismic Safety Commission,"$500 - $1,000",Other
+David Rabbitt,2023,Annual,C - Income Source,Golden Gate Bridge Highway Transportation District,"$1,001 - $10,000",Other
+David Rabbitt,2023,Annual,C - Income Source,Metropolitan Transportation Commission,"$1,001 - $10,000",Other
+David Rabbitt,2023,Annual,C - Income Source,SF Conservation &Development Commission,,Other
+David Rabbitt,2023,Annual,C - Income Source,Sonoma-Marin Area Rail Transit,"$500 - $1,000",Other
+David Rabbitt,2023,Annual,D - Gift,Dayna Ghiradelli,$300.0,2 tickets
+David Rabbitt,2023,Annual,D - Gift,Northern California Engineering Contractors Assoc,$55.0,1 ticket
+David Rabbitt,2023,Annual,D - Gift,Les Perry,$300.0,2 tickets
+David Rabbitt,2023,Annual,D - Gift,John Bly,$150.0,1 ticket
+David Rabbitt,2023,Annual,D - Gift,Carle Libarle,$150.0,2 tickets
+David Rabbitt,2022,Annual,C - Income Source,Association of Bay Area Governments,"$1,001 - $10,000",Other
+David Rabbitt,2022,Annual,C - Income Source,CA Alfred E. Alquist Seismic Safety Commission,"$500 - $1,000",Other
+David Rabbitt,2022,Annual,C - Income Source,Golden Gate Bridge Highway Transportation District,"$1,001 - $10,000",Other
+David Rabbitt,2022,Annual,C - Income Source,Metropolitan Transportation Commission,"$1,001 - $10,000",Other
+David Rabbitt,2022,Annual,C - Income Source,Sonoma-Marin Area Rail Transit,"$500 - $1,000",Other
+David Rabbitt,2022,Annual,C - Income Source,SF Conservation & Development Commission,,Other
+David Rabbitt,2022,Annual,D - Gift,Todd Mendoza,$150.0,1 Ticket
+David Rabbitt,2022,Annual,D - Gift,Carol Libarle,$75.0,1 Ticket
+David Rabbitt,2022,Annual,D - Gift,Northern California Engineering Contractors Assoc.,$55.0,1 Ticket
+David Rabbitt,2022,Annual,D - Gift,John Bly,$150.0,1 Ticket
+David Rabbitt,2022,Annual,D - Gift,Petaluma Gap Winegrowers Alliance,$190.0,2 Tickets
+David Rabbitt,2021,Annual,C - Income Source,Association of Bay Area Governments,"$1,001 - $10,000",Other
+David Rabbitt,2021,Annual,C - Income Source,CA Alfred E. Alquist Seismic Safety Commission,"$500 - $1,000",Other
+David Rabbitt,2021,Annual,C - Income Source,Golden Gate Bridge Highway Transportation District,"$500 - $1,000",Other
+David Rabbitt,2021,Annual,C - Income Source,Metropolitan Transportation Commission,"$1,001 - $10,000",Other
+David Rabbitt,2021,Annual,C - Income Source,Sonoma-Marin Area Rail Transit,"$500 - $1,000",Other
+David Rabbitt,2020,Annual,C - Income Source,Association of Bay Area Governments,"$1,001 - $10,000",Other
+David Rabbitt,2020,Annual,C - Income Source,CA Alfred E. Alquist Seismic Safety Commission,"$500 - $1,000",Other
+David Rabbitt,2020,Annual,C - Income Source,Golden Gate Bridge Highway Transportation District,"$500 - $1,000",Other
+David Rabbitt,2020,Annual,C - Income Source,Metropolitan Transportation Commission,"$1,001 - $10,000",Other
+David Rabbitt,2020,Annual,C - Income Source,Sonoma-Marin Area Rail Transit,"$1,001 - $10,000",Other
+David Rabbitt,2020,Annual,D - Gift,Sonoma County Farm Bureau,$125,1 Ticket
+David Rabbitt,2019,Annual,C - Income Source,Association of Bay Area Governments,"$1,001 - $10,000",Other
+David Rabbitt,2019,Annual,C - Income Source,CA Alfred E. Alquist Seismic Safety Commission,"$500 - $1,000",Other
+David Rabbitt,2019,Annual,C - Income Source,Golden Gate Bridge Highway Transportation District,"$500 - $1,000",Other
+David Rabbitt,2019,Annual,C - Income Source,Sonoma-Marin Area Rail Transit,"$1,001 - $10,000",Other
+David Rabbitt,2019,Annual,C - Income Source,Metropolitan Transportation Commission,"$1,001 - $10,000",Other
+David Rabbitt,2019,Annual,D - Gift,Sonoma County Farm Bureau,$250,2 Tickets
+David Rabbitt,2019,Annual,D - Gift,Leslie Perry,$250,2 Tickets
+David Rabbitt,2019,Annual,D - Gift,Sonoma County Vintners,$300,2 Tickets
+David Rabbitt,2019,Annual,C - Income Source,Association of Bay Area Governments,"$1,001 - $10,000",Other
+David Rabbitt,2019,Annual,C - Income Source,CA Alfred E. Alquist Seismic Safety Commission,"$500 - $1,000",Other
+David Rabbitt,2019,Annual,C - Income Source,Golden Gate Bridge Highway Transportation District,"$1,001 - $10,000",Other
+David Rabbitt,2019,Annual,C - Income Source,Sonoma-Marin Area Rail Transit,"$1,001 - $10,000",Other
+David Rabbitt,2019,Annual,C - Income Source,Metropolitan Transportation Commission,"$1,001 - $10,000",Other
+David Rabbitt,2019,Annual,D - Gift,Sonoma County Farm Bureau,$250,2 Tickets
+David Rabbitt,2019,Annual,D - Gift,Leslie Perry,$250,2 Tickets
+David Rabbitt,2019,Annual,D - Gift,Sonoma County Vintners,$300,2 Tickets
+David Rabbitt,2018,Annual,C - Income Source,Golden Gate Bridge Highway Transportation District,"$500 - $1,000",Other
+David Rabbitt,2018,Annual,C - Income Source,Association of Bay Area Governments,"$1,001 - $10,000",Other
+David Rabbitt,2018,Annual,C - Income Source,CA Alfred E. Alquist Seismic Safety Commission,"$500 - $1,000",Other
+David Rabbitt,2018,Annual,C - Income Source,Sonoma-Marin Area Rail Transit,"$1,001 - $10,000",Other
+David Rabbitt,2018,Annual,D - Gift,THE BOHEMIAN CLUB,$75.0,LUNCHEON
+David Rabbitt,2018,Annual,D - Gift,TITO & JANET SASAKI,$170.0,2 TICKETS
+David Rabbitt,2018,Annual,C - Income Source,Golden Gate Bridge Highway Transportation District,"$500 - $1,000",Other
+David Rabbitt,2018,Annual,C - Income Source,Association of Bay Area Governments,"$1,001 - $10,000",Other
+David Rabbitt,2018,Annual,C - Income Source,CA Alfred E. Alquist Seismic Safety Commission,"$500 - $1,000",Other
+David Rabbitt,2018,Annual,C - Income Source,Sonoma-Marin Area Rail Transit,"$1,001 - $10,000",Other
+David Rabbitt,2018,Annual,D - Gift,THE BOHEMIAN CLUB,$75.0,LUNCHEON
+David Rabbitt,2018,Annual,D - Gift,TITO & JANET SASAKI,$170.0,2 TICKETS
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,ARC Healthcare REIT,"$10,001 - $100,000",Other
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,ARC New York REIT,"$10,001 - $100,000",Other
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,Carter Validus Mission Critical REIT,"$10,001 - $100,000",Other
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,Hewlett-Packard Co,"$2,000 - $10,000",Stock
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,KBS Legacy REIT,"$10,001 - $100,000",Other
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,Medtronic Inc,"$10,001 - $100,000",Stock
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,Phillips Edison REIT,"$10,001 - $100,000",Other
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,Sierra Income Corp,"$10,001 - $100,000",Other
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,Stryker Corp,"$10,001 - $100,000",Stock
+Chris Coursey,2025,Annual,A2 - Private Business Investment,,,
+Chris Coursey,2025,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+Chris Coursey,2025,Annual,D - Gift,Gerard Giudice,$120,"Annual Rohnert Park Crab
+Feed tickets"
+Chris Coursey,2025,Annual,D - Gift,Melanie Jones-Carter,$700,"Museum of Sonoma County
+fundraiser tickets"
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,ARC Healthcare REIT,"$10,001 - $100,000",Other
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,ARC New York REIT,"$10,001 - $100,000",Other
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,Carter Validus Mission Critical REIT,"$10,001 - $100,000",Other
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,Hewlett-Packard Co,"$2,000 - $10,000",Stock
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,KBS Legacy REIT,"$10,001 - $100,000",Other
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,Medtronic Inc,"$10,001 - $100,000",Stock
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,Phillips Edison REIT,"$10,001 - $100,000",Other
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,Sierra Income Corp,"$10,001 - $100,000",Other
+Chris Coursey,2025,Annual,A1 - Publicly Traded Investment,Stryker Corp,"$10,001 - $100,000",Stock
+Chris Coursey,2025,Annual,A2 - Private Business Investment,,,
+Chris Coursey,2025,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+Chris Coursey,2025,Annual,D - Gift,Gerard Giudice,$120,"Annual Rohnert Park Crab
+Feed tickets"
+Chris Coursey,2025,Annual,D - Gift,Melanie Jones-Carter,$700,"Museum of Sonoma County
+fundraiser tickets"
+Chris Coursey,2024,Annual,A1 - Publicly Traded Investment,ARC Healthcare REIT,"$10,001 - $100,000",Other
+Chris Coursey,2024,Annual,A1 - Publicly Traded Investment,ARC New York REIT,"$10,001 - $100,000",Other
+Chris Coursey,2024,Annual,A1 - Publicly Traded Investment,Carter Validus Mission Critical REIT,"$10,001 - $100,000",Other
+Chris Coursey,2024,Annual,A1 - Publicly Traded Investment,Hewlett-Packard Co,"$2,000 - $10,000",Stock
+Chris Coursey,2024,Annual,A1 - Publicly Traded Investment,KBS Legacy REIT,"$10,001 - $100,000",Other
+Chris Coursey,2024,Annual,A1 - Publicly Traded Investment,Medtronic Inc,"$10,001 - $100,000",Stock
+Chris Coursey,2024,Annual,A1 - Publicly Traded Investment,Phillips Edison REIT,"$10,001 - $100,000",Other
+Chris Coursey,2024,Annual,A1 - Publicly Traded Investment,Sierra Income Corp,"$10,001 - $100,000",Other
+Chris Coursey,2024,Annual,A1 - Publicly Traded Investment,Stryker Corp,"$10,001 - $100,000",Stock
+Chris Coursey,2024,Annual,A2 - Private Business Investment,,,
+Chris Coursey,2024,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,ARC Healthcare REIT,"$10,001 - $100,000",Other
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,ARC New York REIT,"$10,001 - $100,000",Other
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,Carter Validus Mission Critical REIT,"$10,001 - $100,000",Other
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,Hewlett-Packard Co,"$2,000 - $10,000",Stock
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,KBS Legacy REIT,"$10,001 - $100,000",Other
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,Medtronic Inc,"$10,001 - $100,000",Stock
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,Phillips Edison REIT,"$10,001 - $100,000",Other
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,Sierra Income Corp,"$10,001 - $100,000",Other
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,Stryker Corp,"$10,001 - $100,000",Stock
+Chris Coursey,2023,Annual,A2 - Private Business Investment,,,
+Chris Coursey,2023,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+Chris Coursey,2023,Annual,D - Gift,Kathy Goodacre,$125,event ticket
+Chris Coursey,2023,Annual,D - Gift,Carla Rodriguez,$175,Event Ticket
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,ARC Healthcare REIT,"$10,001 - $100,000",Other
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,ARC New York REIT,"$10,001 - $100,000",Other
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,Carter Validus Mission Critical REIT,"$10,001 - $100,000",Other
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,Hewlett-Packard Co,"$2,000 - $10,000",Stock
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,KBS Legacy REIT,"$10,001 - $100,000",Other
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,Medtronic Inc,"$10,001 - $100,000",Stock
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,Phillips Edison REIT,"$10,001 - $100,000",Other
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,Sierra Income Corp,"$10,001 - $100,000",Other
+Chris Coursey,2023,Annual,A1 - Publicly Traded Investment,Stryker Corp,"$10,001 - $100,000",Stock
+Chris Coursey,2023,Annual,A2 - Private Business Investment,,,
+Chris Coursey,2023,Annual,A2 - Private Business Investment,,,
+Chris Coursey,2023,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+Chris Coursey,2023,Annual,D - Gift,Kathy Goodacre,$125,event ticket
+Chris Coursey,2023,Annual,D - Gift,Carla Rodriguez,$175,event ticket
+Chris Coursey,2022,Annual,A1 - Publicly Traded Investment,ARC Healthcare REIT,"$10,001 - $100,000",Other
+Chris Coursey,2022,Annual,A1 - Publicly Traded Investment,ARC New York REIT,"$10,001 - $100,000",Other
+Chris Coursey,2022,Annual,A1 - Publicly Traded Investment,Carter Validus Mission Critical REIT,"$10,001 - $100,000",Other
+Chris Coursey,2022,Annual,A1 - Publicly Traded Investment,Hewlett-Packard Co,"$2,000 - $10,000",Stock
+Chris Coursey,2022,Annual,A1 - Publicly Traded Investment,KBS Legacy REIT,"$10,001 - $100,000",Other
+Chris Coursey,2022,Annual,A1 - Publicly Traded Investment,Medtronic Inc,"$10,001 - $100,000",Stock
+Chris Coursey,2022,Annual,A1 - Publicly Traded Investment,Phillips Edison REIT,"$10,001 - $100,000",Other
+Chris Coursey,2022,Annual,A1 - Publicly Traded Investment,Sierra Income Corp,"$10,001 - $100,000",Other
+Chris Coursey,2022,Annual,A1 - Publicly Traded Investment,Stryker Corp,"$10,001 - $100,000",Stock
+Chris Coursey,2022,Annual,A2 - Private Business Investment,,,
+Chris Coursey,2022,Annual,A2 - Private Business Investment,,,
+Chris Coursey,2022,Annual,A2 - Private Business Investment,,,
+Chris Coursey,2022,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+Chris Coursey,2022,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+Chris Coursey,2022,Annual,C - Income Source,Gift Grant Deed,,Other
+Chris Coursey,2021,Annual,A1 - Publicly Traded Investment,ARC Healthcare REIT,"$10,001 - $100,000",Other
+Chris Coursey,2021,Annual,A1 - Publicly Traded Investment,ARC New York REIT,"$10,001 - $100,000",Other
+Chris Coursey,2021,Annual,A1 - Publicly Traded Investment,Carter Validus Mission Critical REIT,"$10,001 - $100,000",Other
+Chris Coursey,2021,Annual,A1 - Publicly Traded Investment,Hewlett-Packard Co,"$2,000 - $10,000",Stock
+Chris Coursey,2021,Annual,A1 - Publicly Traded Investment,KBS Legacy REIT,"$10,001 - $100,000",Other
+Chris Coursey,2021,Annual,A1 - Publicly Traded Investment,Medtronic Inc,"$10,001 - $100,000",Stock
+Chris Coursey,2021,Annual,A1 - Publicly Traded Investment,Phillips Edison REIT,"$10,001 - $100,000",Other
+Chris Coursey,2021,Annual,A1 - Publicly Traded Investment,Sierra Income Corp,"$10,001 - $100,000",Other
+Chris Coursey,2021,Annual,A1 - Publicly Traded Investment,Stryker Corp,"$10,001 - $100,000",Stock
+Chris Coursey,2021,Annual,A2 - Private Business Investment,,,
+Chris Coursey,2021,Annual,A2 - Private Business Investment,,,
+Chris Coursey,2021,Annual,A2 - Private Business Investment,,,
+Chris Coursey,2021,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+Chris Coursey,2021,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+Chris Coursey,2021,Annual,D - Gift,United Policyholders,$200,fundraiser
+Chris Coursey,2021,Assuming,A1 - Publicly Traded Investment,Hewlett-Packard Co,"$2,000 - $10,000",Stock
+Chris Coursey,2021,Assuming,A1 - Publicly Traded Investment,Medtronic Inc,"$10,001 - $100,000",Stock
+Chris Coursey,2021,Assuming,A1 - Publicly Traded Investment,ARC New York REIT,"$10,001 - $100,000",Other
+Chris Coursey,2021,Assuming,A1 - Publicly Traded Investment,Stryker Corp,"$10,001 - $100,000",Stock
+Chris Coursey,2021,Assuming,A1 - Publicly Traded Investment,ARC Healthcare REIT,"$10,001 - $100,000",Other
+Chris Coursey,2021,Assuming,A1 - Publicly Traded Investment,KBS Legacy REIT,"$10,001 - $100,000",Other
+Chris Coursey,2021,Assuming,A1 - Publicly Traded Investment,Carter Validus Mission Critical REIT,"$10,001 - $100,000",Other
+Chris Coursey,2021,Assuming,A1 - Publicly Traded Investment,Sierra Income Corp,"$10,001 - $100,000",Other
+Chris Coursey,2021,Assuming,A1 - Publicly Traded Investment,Phillips Edison REIT,"$10,001 - $100,000",Other
+Chris Coursey,2021,Assuming,A2 - Private Business Investment,,,
+Chris Coursey,2021,Assuming,A2 - Private Business Investment,,,
+Chris Coursey,2021,Assuming,A2 - Private Business Investment,,,
+Chris Coursey,2021,Assuming,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+Chris Coursey,2021,Assuming,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+James Gore,2025,Annual,A1 - Publicly Traded Investment,Classy (Company dissolved),"$2,000 - $10,000",Other
+James Gore,2025,Annual,A1 - Publicly Traded Investment,"Portfolia Consumer Fund, LLC","$2,000 - $10,000",Stock
+James Gore,2025,Annual,A1 - Publicly Traded Investment,Scoop (Company Dissolved),"$2,000 - $10,000",Other
+James Gore,2025,Annual,A2 - Private Business Investment,,,
+James Gore,2025,Annual,A2 - Private Business Investment,,,
+James Gore,2025,Annual,A2 - Private Business Investment,,,
+James Gore,2025,Annual,A2 - Private Business Investment,,,
+James Gore,2025,Annual,A2 - Private Business Investment,,,
+James Gore,2025,Annual,C - Income Source,Circular Board/Hello Alice,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2025,Annual,C - Income Source,Gen Sando,,Other
+James Gore,2022,Annual,A1 - Publicly Traded Investment,Scoop,"$2,000 - $10,000",Other
+James Gore,2022,Annual,A1 - Publicly Traded Investment,"Portfolia Consumer Fund, LLC","$2,000 - $10,000",Stock
+James Gore,2022,Annual,A1 - Publicly Traded Investment,Classy,"$10,001 - $100,000",Other
+James Gore,2022,Annual,A2 - Private Business Investment,,,
+James Gore,2022,Annual,A2 - Private Business Investment,,,
+James Gore,2022,Annual,A2 - Private Business Investment,,,
+James Gore,2022,Annual,A2 - Private Business Investment,,,
+James Gore,2022,Annual,C - Income Source,Circluar Board/Hello Alice,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2022,Candidate,A1 - Publicly Traded Investment,Scoop,"$2,000 - $10,000",Other
+James Gore,2022,Candidate,A1 - Publicly Traded Investment,"Portfolia Consumer Fund, LLC","$2,000 - $10,000",Stock
+James Gore,2022,Candidate,A1 - Publicly Traded Investment,Classy,"$10,001 - $100,000",Other
+James Gore,2022,Candidate,A2 - Private Business Investment,,,
+James Gore,2022,Candidate,A2 - Private Business Investment,,,
+James Gore,2022,Candidate,A2 - Private Business Investment,,,
+James Gore,2022,Candidate,A2 - Private Business Investment,,,
+James Gore,2022,Candidate,C - Income Source,Circular Board/Hello Alice,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2023,Annual,A2 - Private Business Investment,,,
+James Gore,2024,Annual,A1 - Publicly Traded Investment,Scoop,"$2,000 - $10,000",Other
+James Gore,2024,Annual,A2 - Private Business Investment,,,
+James Gore,2024,Annual,A2 - Private Business Investment,,,
+James Gore,2024,Annual,A1 - Publicly Traded Investment,Classy,"$10,001 - $100,000",Other
+James Gore,2024,Annual,A1 - Publicly Traded Investment,"Portfolia Consumer Fund, LLC","$2,000 - $10,000",Stock
+James Gore,2024,Annual,A2 - Private Business Investment,,,
+James Gore,2024,Annual,C - Income Source,Circular Board/Hello Alice,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2024,Annual,D - Gift,Sonoma County Farm Bureau Crab Feed,$165.0,Ticket
+James Gore,2024,Annual,D - Gift,Sonoma County Vintners Taste of Sonoma,$190.0,Ticket
+James Gore,2023,Annual,A1 - Publicly Traded Investment,Classy,"$10,001 - $100,000",Other
+James Gore,2023,Annual,A1 - Publicly Traded Investment,"Portfolia Consumer Fund, LLC","$2,000 - $10,000",Stock
+James Gore,2023,Annual,A1 - Publicly Traded Investment,SCOOP,"$2,000 - $10,000",Other
+James Gore,2023,Annual,A2 - Private Business Investment,,,
+James Gore,2023,Annual,A2 - Private Business Investment,,,
+James Gore,2023,Annual,A2 - Private Business Investment,,,
+James Gore,2023,Annual,C - Income Source,Hello Alice,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2022,Annual,A1 - Publicly Traded Investment,Classy,"$10,001 - $100,000",Other
+James Gore,2022,Annual,A1 - Publicly Traded Investment,"Portfolia Consumer Fund, LLC","$2,000 - $10,000",Stock
+James Gore,2022,Annual,A1 - Publicly Traded Investment,SCOOP,"$2,000 - $10,000",Other
+James Gore,2022,Annual,A2 - Private Business Investment,,,
+James Gore,2022,Annual,A2 - Private Business Investment,,,
+James Gore,2022,Annual,A2 - Private Business Investment,,,
+James Gore,2021,Annual,A1 - Publicly Traded Investment,Scoop,"$2,000 - $10,000",Other
+James Gore,2021,Annual,A1 - Publicly Traded Investment,"Portfolia Consumer Fund, LLC","$2,000 - $10,000",Stock
+James Gore,2021,Annual,A1 - Publicly Traded Investment,Classy,"$10,001 - $100,000",Other
+James Gore,2021,Annual,A2 - Private Business Investment,,,
+James Gore,2021,Annual,A2 - Private Business Investment,,,
+James Gore,2021,Annual,A2 - Private Business Investment,,,
+James Gore,2021,Annual,C - Income Source,Hello Alice,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2020,Annual,A1 - Publicly Traded Investment,Scoop,"$2,000 - $10,000",Other
+James Gore,2020,Annual,A1 - Publicly Traded Investment,"Portfolia Consumer Fund, LLC","$2,000 - $10,000",Stock
+James Gore,2020,Annual,A1 - Publicly Traded Investment,Classy,"$10,001 - $100,000",Other
+James Gore,2020,Annual,A2 - Private Business Investment,,,
+James Gore,2020,Annual,A2 - Private Business Investment,,,
+James Gore,2020,Annual,A2 - Private Business Investment,,,
+James Gore,2020,Annual,C - Income Source,Hello Alice,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2018,Annual,A1 - Publicly Traded Investment,Scoop,"$2,000 - $10,000",Other
+James Gore,2018,Annual,A1 - Publicly Traded Investment,"Portfolia Consumer Fund, LLC","$2,000 - $10,000",Stock
+James Gore,2018,Annual,A1 - Publicly Traded Investment,Classy,"$10,001 - $100,000",Other
+James Gore,2018,Annual,A2 - Private Business Investment,,,
+James Gore,2018,Annual,A2 - Private Business Investment,,,
+James Gore,2018,Annual,A2 - Private Business Investment,,,
+James Gore,2018,Annual,C - Income Source,Hello Alice,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2019,Annual,A1 - Publicly Traded Investment,Scoop,"$2,000 - $10,000",Other
+James Gore,2019,Annual,A1 - Publicly Traded Investment,"Portfolia Consumer Fund, LLC","$2,000 - $10,000",Stock
+James Gore,2019,Annual,A1 - Publicly Traded Investment,Classy,"$10,001 - $100,000",Other
+James Gore,2019,Annual,A2 - Private Business Investment,,,
+James Gore,2019,Annual,A2 - Private Business Investment,,,
+James Gore,2019,Annual,A2 - Private Business Investment,,,
+James Gore,2019,Annual,C - Income Source,Hello Alice,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2021,Annual,A2 - Private Business Investment,,,
+James Gore,2021,Annual,A2 - Private Business Investment,,,
+James Gore,2021,Annual,A2 - Private Business Investment,,,
+James Gore,2021,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+James Gore,2021,Annual,C - Income Source,Elizabeth Gore,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2021,Annual,C - Income Source,James Gore,{'gte': 100000},Salary
+James Gore,2021,Annual,A2 - Private Business Investment,,,
+James Gore,2021,Annual,A2 - Private Business Investment,,,
+James Gore,2021,Annual,A2 - Private Business Investment,,,
+James Gore,2021,Annual,B - Real Property,,{'gte': 1000000},Ownership/Deed of Trust
+James Gore,2021,Annual,C - Income Source,Elizabeth Gore (Spouse),{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2021,Annual,C - Income Source,James Gore,{'gte': 100000},Salary
+James Gore,2021,Annual,C - Income Source,James Gore,{'gte': 100000},Salary
+James Gore,2018,Annual,A2 - Private Business Investment,,,
+James Gore,2019,Annual,A2 - Private Business Investment,,,
+James Gore,2020,Annual,A2 - Private Business Investment,,,
+James Gore,2019,Annual,A2 - Private Business Investment,,,
+James Gore,2020,Annual,C - Income Source,Elizabeth Gore,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2020,Annual,C - Income Source,James Gore,{'gte': 100000},Salary
+James Gore,2020,Annual,A2 - Private Business Investment,,,
+James Gore,2020,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+James Gore,2020,Annual,A2 - Private Business Investment,,,
+James Gore,2020,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+James Gore,2020,Annual,C - Income Source,Elizabeth Gore,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2020,Annual,C - Income Source,James Gore,{'gte': 100000},Salary
+James Gore,2019,Annual,A2 - Private Business Investment,,,
+James Gore,2019,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+James Gore,2019,Annual,C - Income Source,Elizabeth Gore,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2019,Annual,C - Income Source,James Gore,{'gte': 100000},Salary
+James Gore,2019,Annual,D - Gift,Sonoma County Farm Bureau Crab Feed,$120.0,Ticket
+James Gore,2019,Annual,D - Gift,California Forward,$113.95,Meals
+James Gore,2019,Annual,A2 - Private Business Investment,,,
+James Gore,2019,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+James Gore,2019,Annual,D - Gift,Sonoma County Farm Bureau Crab Feed,$120.0,Ticket
+James Gore,2019,Annual,D - Gift,California Forward,$113.95,Meals
+James Gore,2018,Annual,A2 - Private Business Investment,,,
+James Gore,2018,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+James Gore,2018,Annual,C - Income Source,James Gore,{'gte': 100000},Salary
+James Gore,2018,Annual,C - Income Source,Elizabeth Gore,{'gte': 100000},Spouse's or registered domestic partner's income
+James Gore,2018,Annual,D - Gift,Nielsen Merksamer,$106.34,CSAC Dinner Hosts
+James Gore,2018,Annual,D - Gift,Girls & Boys Club Pig Roast,$100,2 Tickets
+James Gore,2018,Annual,D - Gift,Farm Bureau Crab Feed,$170.0,2 TICKETS
+Lynda Hopkins,2025,Annual,A2 - Private Business Investment,,,
+Lynda Hopkins,2025,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+Lynda Hopkins,2025,Annual,C - Income Source,Climate and Community Project,{'gte': 100000},Spouse's or registered domestic partner's income
+Lynda Hopkins,2024,Annual,A2 - Private Business Investment,,,
+Lynda Hopkins,2024,Annual,B - Real Property,,"$100,001 - $1,000,000",Ownership/Deed of Trust
+Lynda Hopkins,2024,Annual,C - Income Source,Climate and Community Project,{'gte': 100000},Spouse's or registered domestic partner's income
+Lynda Hopkins,2024,Annual,D - Gift,Alliance Redwoods,$109,Zipline tour meeting
+Lynda Hopkins,2024,Annual,D - Gift,Hap Sakwa,$500,Wood heart sculpture
+Lynda Hopkins,2020,Annual,C - Income Source,LandPaths,"$10,001 - $100,000",Spouse's or registered domestic partner's income
+Lynda Hopkins,2023,Annual,A2 - Private Business Investment,,,
+Lynda Hopkins,2023,Annual,C - Income Source,Climate and Community Project,{'gte': 100000},Spouse's or registered domestic partner's income
+Lynda Hopkins,2023,Candidate,C - Income Source,Climate & Community Project,{'gte': 100000},Spouse's or registered domestic partner's income
+Lynda Hopkins,2023,Candidate,A2 - Private Business Investment,,,
+Lynda Hopkins,2022,Annual,A2 - Private Business Investment,,,
+Lynda Hopkins,2022,Annual,C - Income Source,Climate Mobilization Project,"$10,001 - $100,000",Spouse's or registered domestic partner's income
+Lynda Hopkins,2022,Annual,D - Gift,First 5,$55,Los Cien ticket donation
+Lynda Hopkins,2022,Annual,A2 - Private Business Investment,,,
+Lynda Hopkins,2022,Annual,C - Income Source,Climate Mobilization Project,"$10,001 - $100,000",Spouse's or registered domestic partner's income
+Lynda Hopkins,2022,Annual,D - Gift,First 5,$55,Los Cien Ticket donation
+Lynda Hopkins,2021,Annual,A2 - Private Business Investment,,,
+Lynda Hopkins,2021,Annual,C - Income Source,Climate Mobilization Project,"$10,001 - $100,000",Spouse's or registered domestic partner's income
+Lynda Hopkins,2021,Annual,A2 - Private Business Investment,,,
+Lynda Hopkins,2021,Annual,C - Income Source,Climate Mobilization Project,"$10,001 - $100,000",Spouse's or registered domestic partner's income
+Lynda Hopkins,2020,Annual,A2 - Private Business Investment,,,
+Lynda Hopkins,2020,Annual,A2 - Private Business Investment,,,
+Lynda Hopkins,2019,Annual,A2 - Private Business Investment,,,
+Lynda Hopkins,2019,Annual,C - Income Source,Landpaths,"$10,001 - $100,000",Spouse's or registered domestic partner's income
+Lynda Hopkins,2019,Annual,D - Gift,Richard Ogg,$110.0,2 Event Tickets
+Lynda Hopkins,2019,Annual,D - Gift,Judy Jordan,$95.0,Event Ticket
+Lynda Hopkins,2019,Annual,D - Gift,Caryl Hart,$187.5,Event Ticket
+Lynda Hopkins,2019,Annual,D - Gift,Herman J. Hernandez,$50.0,Event Ticket
+Lynda Hopkins,2019,Annual,D - Gift,Michael Hart,$187.5,Event Ticket
+Lynda Hopkins,2018,Annual,A2 - Private Business Investment,,,
+Lynda Hopkins,2018,Annual,C - Income Source,Landpaths,"$10,001 - $100,000",Spouse's or registered domestic partner's income
+Lynda Hopkins,2018,Annual,D - Gift,Tito Sasaki,$170.0,event tickets
+Lynda Hopkins,2018,Annual,D - Gift,Janet Sasaki,$175.0,event tickets
+Lynda Hopkins,2018,Annual,D - Gift,Barbara Grasseschi & Tony Crabb,$250.0,event ticket
+Lynda Hopkins,2018,Annual,D - Gift,Robert Janover,$448.5,Posters
