@@ -3,206 +3,189 @@ import time
 import csv
 from datetime import datetime, timedelta
 
-# --- CONFIG ---
-COUNTY_NAME = "sacramento"  # sonoma-county, sacramento, etc...
-API_URL = f"https://webapi.legistar.com/v1/{COUNTY_NAME}"
-SITE_LINK = f"https://{COUNTY_NAME}.legistar.com/gateway.aspx?m=l&id=/matter.aspx?key="
-CSV_FILE = "legistar_data2.csv"
-YEARS_BACK = 1
-SLEEP_SECONDS = 0.5
+# ── Config ────────────────────────────────────────────────────────────────────
+COUNTY_NAME    = "sonoma-county"
+API_URL        = f"https://webapi.legistar.com/v1/{COUNTY_NAME}"
+SITE_LINK      = f"https://sonoma-county.legistar.com/gateway.aspx?m=l&id=/matter.aspx?key="
+CSV_FILE       = "decisions_test6.csv"
+YEARS_BACK     = 7
+SLEEP_SECONDS  = 0.5
+
+
+# ── HTTP ──────────────────────────────────────────────────────────────────────
 
 def safe_get(url, max_retries=5):
-    # Rate limiter
     backoff = 2
     for i in range(max_retries):
         try:
-            resp = requests.get(url)
-
+            resp = requests.get(url, timeout=30)
             if resp.status_code == 429:
-                print(f"Rate limit hit. Waiting {backoff}s before retry...")
+                print(f"  Rate limited. Waiting {backoff}s...")
                 time.sleep(backoff)
                 backoff *= 2
                 continue
-
-            resp.raise_for_status()
+            if not resp.ok:
+                print(f"  HTTP {resp.status_code} on attempt {i+1}: {url}")
+                print(f"  Response: {resp.text[:300]}")
+                if i == max_retries - 1:
+                    return None
+                time.sleep(backoff)
+                backoff *= 2
+                continue
             return resp.json()
-
         except requests.exceptions.RequestException as e:
+            print(f"  Network error on attempt {i+1}: {e}")
             if i == max_retries - 1:
-                print(f"Failed after {max_retries} attempts: {url}")
-                raise e
+                return None
             time.sleep(backoff)
+            backoff *= 2
     return None
+
+
+# ── Legistar API calls ────────────────────────────────────────────────────────
 
 def fetch_matters(cutoff):
     all_matters = []
-    page_size = 100
-    skip = 0
+    page_size   = 100
+    skip        = 0
+    date_str    = f"{cutoff.year}-{cutoff.month:02d}-{cutoff.day:02d}"
+
+    print(f"Fetching matters introduced since {date_str}...")
 
     while True:
         url = (
             f"{API_URL}/Matters"
-            f"?$filter=MatterPassedDate ge datetime'{cutoff.year}-{cutoff.month:02d}-{cutoff.day:02d}'"
+            f"?$filter=MatterIntroDate ge datetime'{date_str}'"
             f"&$top={page_size}&$skip={skip}"
         )
-
-        matters = safe_get(url)
-        if not matters:
+        batch = safe_get(url)
+        if not batch:
             break
-
-        all_matters.extend(matters)
-        print(f"Fetched {len(all_matters)} total matters...")
-
+        all_matters.extend(batch)
+        print(f"  Fetched {len(all_matters)} matters so far...")
+        if len(batch) < page_size:
+            break
         skip += page_size
         time.sleep(SLEEP_SECONDS)
 
+    print(f"  Total matters: {len(all_matters)}")
     return all_matters
 
-def get_matter_history(matter_id):
-    url = f"{API_URL}/Matters/{matter_id}/Histories"
-    return safe_get(url)
 
-def get_matter_text(matter_id):
-    # 1. Get versions
-    url = f"{API_URL}/Matters/{matter_id}/Versions"
-    versions = safe_get(url)
+def get_final_action(matter_id):
+    """Returns the most relevant history entry, preferring entries with a recorded vote."""
+    history = safe_get(f"{API_URL}/Matters/{matter_id}/Histories") or []
+    if not history:
+        return None
 
-    if not versions or not isinstance(versions, list):
-        return {}
-
-    # 2. Get the key from the first entry
-    key = versions[0].get("Key")
-    if not key:
-        return {}
-
-    # 3. Get text using the key
-    url = f"{API_URL}/Matters/{matter_id}/Texts/{key}"
-    return safe_get(url)
+    voted = [h for h in history if h.get("MatterHistoryPassedFlag") is not None]
+    entries = voted if voted else history
+    entries.sort(key=lambda h: h.get("MatterHistoryActionDate") or "", reverse=True)
+    return entries[0]
 
 
-def get_names(matter_text):
-    if not matter_text:
+def get_event_body(event_id):
+    """Returns the meeting body name (e.g. 'Board of Supervisors')."""
+    if not event_id:
+        return ""
+    event = safe_get(f"{API_URL}/Events/{event_id}")
+    if not event:
+        return ""
+    return event.get("EventBodyName", "")
+
+
+def get_individual_votes(history_entry, matter_id):
+    """
+    Returns a list of {name, outcome} dicts — one per supervisor who voted.
+    VoteValueName gives the per-person outcome: Yes, No, Abstain, etc.
+    """
+    if not history_entry:
+        return []
+    event_id = history_entry.get("MatterHistoryEventId")
+    if not event_id:
         return []
 
-    anchor = "Staff Name and Phone Number:"
-    if anchor in matter_text:
-        after_anchor = matter_text.split(anchor)[1]
-        names_block = after_anchor.split('\n')[0].strip()
-        entries = names_block.split(',')
-
-        found_names = []
-        for entry in entries:
-            entry = entry.strip()
-            name_only = ""
-            for char in entry:
-                if char.isdigit(): break
-                name_only += char
-
-            name = name_only.strip()
-            if name.lower().startswith("and "):
-                name = name[4:].strip()
-            if name:
-                found_names.append(name)
-        return found_names
+    items = safe_get(f"{API_URL}/Events/{event_id}/EventItems") or []
+    for item in items:
+        if str(item.get("EventItemMatterId")) == str(matter_id):
+            event_item_id = item.get("EventItemId")
+            votes = safe_get(f"{API_URL}/EventItems/{event_item_id}/Votes") or []
+            return [
+                {
+                    "name":    v.get("VotePersonName", ""),
+                    "outcome": v.get("VoteValueName", ""),
+                }
+                for v in votes if v.get("VotePersonName")
+            ]
     return []
 
-def get_votes(hist_event_id, guid):
-    url = f"{API_URL}/Events/{hist_event_id}/EventItems"
-    events = safe_get(url)
-    event_item_id = 0
 
-    if not events or not isinstance(events, list):
-        return {}
+# ── Main ──────────────────────────────────────────────────────────────────────
 
-    for event in events:
-        if event.get("EventItemGuid") == guid:
-            event_item_id = event.get("EventItemId")
-            url = f"{API_URL}/EventItems/{event_item_id}/Votes"
-        else:
-            continue
-    votes = safe_get(url)
-    names = []
+def scrape():
+    cutoff  = datetime.now() - timedelta(days=365 * YEARS_BACK)
+    matters = fetch_matters(cutoff)
 
-    for vote in votes:
-        names.append(vote.get("VotePersonName"))
+    if not matters:
+        print("No matters found. Check API connection or COUNTY_NAME.")
+        return
 
-    return names
+    rows_written = 0
 
-def csv_writer(file_name):
-    with open(file_name, "a", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
+    with open(CSV_FILE, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow([
+            "Official Name",
+            "Vote Outcome",
+            "File Number",
+            "Agenda Item Subject",
+            "Vote Date",
+            "Meeting Type",
+            "Overall Result",
+            "Link",
+        ])
+        f.flush()
 
-        writer.writerow(["File name",
-                         "Title",
-                         "Action",
-                         "Status",
-                         "Date",
-                         "Movers",
-                         "Voters"
-                         "Staff Names",
-                         "Link"])
-        extract_data(writer)
+        total = len(matters)
+        for i, matter in enumerate(matters, 1):
+            matter_id = matter.get("MatterId")
+            file_num  = matter.get("MatterFile", "")
+            title     = matter.get("MatterTitle", "")
+            link      = f"{SITE_LINK}{matter_id}"
 
-def extract_data(csv_file, years_back=YEARS_BACK):
-    cutoff = datetime.now() - timedelta(days=365 * years_back)
+            print(f"\n[{i}/{total}] {file_num} — {title[:70]}")
 
-    for matter in fetch_matters(cutoff):
-        matter_id = matter.get("MatterId")
-        title = matter.get("MatterTitle")
-        matter_file = matter.get("MatterFile")
-        matter_text = get_matter_text(matter_id)
-        staff_names = get_names(matter_text.get("MatterTextPlain"))
-        try:
-            history = get_matter_history(matter_id)
-
-        except Exception as e:
-            print(f"Error fetching history for {matter_id}: {e}")
-            continue
-
-        for h in history:
-            matter_history_guid = h.get("MatterHistoryGuid")
-            matter_history_event_id = h.get("MatterHistoryEventId")
-
-            vote_names = get_votes(matter_history_event_id, matter_history_guid)
-
-            action = h.get("MatterHistoryActionName")
-            action_date = h.get("MatterHistoryActionDate")
-            status = h.get("MatterHistoryPassedFlagName")
-            mover_name = h.get("MatterHistoryMoverName")
-            seconder_name = h.get("MatterHistorySeconderName")
-
-            print("\n==============================")
-            print("File: ", matter_file)
-            print("Title:", title)
-            print("Action:", action)
-            print("Status:", status)
-            print("Date:", action_date)
-            print(f"Mover: {mover_name}, Seconder: {seconder_name}", )
-            print("Voters: ", end="")
-
-            for vote in vote_names:
-                print(f"{vote}, ", end="")
-
-            print("\nStaff Names: ", end="")
-            if staff_names:
-                for name in staff_names:
-                    print(f"{name}, ", end="")
+            final = get_final_action(matter_id)
+            if final:
+                action_date  = (final.get("MatterHistoryActionDate") or "")[:10]
+                result       = final.get("MatterHistoryPassedFlagName", "")
+                event_id     = final.get("MatterHistoryEventId")
+                meeting_type = get_event_body(event_id)
+                votes        = get_individual_votes(final, matter_id)
             else:
-                print("None")
+                action_date = result = meeting_type = ""
+                votes = []
 
-            print(f"\nLink: {SITE_LINK}{matter_id}")
+            print(f"  Result: {result} | Meeting: {meeting_type} | Votes: {len(votes)}")
 
-            csv_file.writerow([matter_file,
-                title,
-                action,
-                status,
-                action_date,
-                f"{mover_name}, {seconder_name}",
-                vote_names,
-                staff_names,
-                f"{SITE_LINK}{matter_id}"])
+            for vote in votes:
+                writer.writerow([
+                    vote["name"],
+                    vote["outcome"],
+                    file_num,
+                    title,
+                    action_date,
+                    meeting_type,
+                    result,
+                    link,
+                ])
+                f.flush()
+                rows_written += 1
 
-        time.sleep(SLEEP_SECONDS)
+            time.sleep(SLEEP_SECONDS)
+
+    print(f"\nDone. {rows_written} rows written to {CSV_FILE}")
+
 
 if __name__ == "__main__":
-    csv_writer(CSV_FILE)
+    scrape()
