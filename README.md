@@ -19,13 +19,13 @@ their voting/decision records.
 ### 1. Install dependencies
 
 ```bash
-cd fppc_app
 pip install -r requirements.txt
 ```
 
 ### 2. Start the backend
 
 ```bash
+venv\Scripts\activate
 cd backend
 uvicorn main:app --reload
 ```
@@ -33,7 +33,16 @@ uvicorn main:app --reload
 The API will be live at **http://localhost:8000**
 Interactive API docs at **http://localhost:8000/docs**
 
-### 3. Open the app
+### 3. Configure scrapers
+- in webScraperLegistar.py, change "COUNTY_NAME" to desired county (default is sonoma-county)
+- in form700Scraper.py, change SUPERVISORS and agency (default are "Sonoma County Board of Supervisors" and "Sonoma County", respectively)
+- change destination file name is desired
+
+### 4. Run Scrapers
+- run the scrapers in the terminal
+- note the destination csv files
+
+### 4. Open the app
 
 Visit **http://localhost:8000** in your browser.
 
@@ -41,10 +50,9 @@ Visit **http://localhost:8000** in your browser.
 
 ## How to use
 
-1. **Upload** your interests CSV (Form 700 / Schedule A) and your votes/decisions CSV
-2. **Map columns** — the app auto-detects the right columns but lets you override
-3. **Run analysis** — results are scored, tiered (High / Medium / Low), and saved to the database
-4. **Past Runs tab** — reload any previous analysis from the database
+1. **Upload** your interests CSV (Form 700 / Sc) and your votes/decisions CSV
+2. **Run analysis** — results are scored, tiered (High / Medium / Low), and saved to the database
+3. **Past Runs tab** — reload any previous analysis from the database
 
 ---
 
@@ -59,38 +67,3 @@ Visit **http://localhost:8000** in your browser.
 | GET    | `/api/results/{run_id}`   | Fetch results for a run (filterable) |
 | GET    | `/api/runs`               | List all past runs                   |
 
----
-
-## Upgrading to PostgreSQL
-
-In `backend/main.py`, change:
-
-```python
-engine = get_engine("sqlite:///./fppc.db")
-```
-
-to:
-
-```python
-engine = get_engine("postgresql://user:password@localhost/fppc")
-```
-
-Then `pip install psycopg2-binary`.
-
----
-
-## Project Structure
-
-```
-fppc_app/
-├── backend/
-│   ├── main.py       # FastAPI routes
-│   ├── models.py     # SQLAlchemy ORM models
-│   └── matcher.py    # Conflict scoring engine
-├── frontend/
-│   ├── index.html
-│   └── static/
-│       ├── css/style.css
-│       └── js/app.js
-└── requirements.txt
-```
