@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conflict of Interest Scanner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <span class="logo-icon">⚖</span>
+      <span class="logo-text">Conflict <strong>Scanner</strong></span>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" data-tab="analyze">Analyze</button>
+      <button class="tab" data-tab="history">Past Runs</button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ── Analyze tab ─────────────────────────────────────────── -->
+    <section id="analyze" class="tab-content active">
+
+      <!-- Step 1: Upload -->
+      <div class="step" id="step1">
+        <div class="step-header">
+          <span class="step-num">1</span>
+          <span>Upload Data Files</span>
+        </div>
+        <div class="upload-grid">
+
+          <div class="drop-zone" id="interests-zone" data-kind="interests">
+            <div class="drop-icon">📋</div>
+            <div class="drop-label">Form 700 / Interests CSV</div>
+            <div class="drop-hint">income_sources.csv</div>
+            <input type="file" accept=".csv" hidden />
+          </div>
+
+          <div class="drop-zone" id="decisions-zone" data-kind="votes">
+            <div class="drop-icon">🗳</div>
+            <div class="drop-label">Decisions / Votes CSV</div>
+            <div class="drop-hint">decisions.csv</div>
+            <input type="file" accept=".csv" hidden />
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step 2: Run -->
+      <div class="step" id="step2" style="display:none">
+        <div class="step-header">
+          <span class="step-num">2</span>
+          <span>Run Analysis</span>
+        </div>
+        <div class="dataset-pills">
+          <span class="pill" id="interests-pill"></span>
+          <span class="pill" id="decisions-pill"></span>
+        </div>
+        <p class="run-note">
+          The scanner fetches each Legistar matter page and searches the full body text —
+          the same logic as <code>conflictScanner.py</code>. A full dataset takes ~40 min.
+        </p>
+        <button class="btn-run" id="run-btn">Run Conflict Scan</button>
+      </div>
+
+      <!-- Progress -->
+      <div id="progress-area" style="display:none">
+        <div class="progress-card">
+          <div class="progress-header">
+            <span class="progress-label" id="progress-label">Scanning…</span>
+            <span class="progress-count" id="progress-count"></span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="progress-bar"></div>
+          </div>
+          <div class="progress-flagged" id="progress-flagged">0 conflicts flagged so far</div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div id="results-area" style="display:none">
+        <div class="results-header">
+          <div class="stat-bar">
+            <span class="stat" id="stat-total"></span>
+            <span class="stat-sep">·</span>
+            <span class="stat high" id="stat-high"></span>
+            <span class="stat medium" id="stat-medium"></span>
+            <span class="stat low" id="stat-low"></span>
+          </div>
+        </div>
+        <div id="results-list"></div>
+      </div>
+
+    </section>
+
+    <!-- ── Past Runs tab ───────────────────────────────────────── -->
+    <section id="history" class="tab-content">
+      <div id="runs-list">
+        <div class="empty-state">Loading past runs…</div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
