@@ -1,5 +1,4 @@
 import requests
-import re
 import time
 import csv
 from datetime import datetime, timedelta
@@ -8,7 +7,7 @@ from datetime import datetime, timedelta
 COUNTY_NAME    = "sonoma-county"
 API_URL        = f"https://webapi.legistar.com/v1/{COUNTY_NAME}"
 SITE_LINK      = f"https://sonoma-county.legistar.com/gateway.aspx?m=l&id=/matter.aspx?key="
-CSV_FILE       = "decisions_test3.csv"
+CSV_FILE       = "decisions_test5.csv"
 YEARS_BACK     = 5
 SLEEP_SECONDS  = 0.5
 
@@ -73,136 +72,32 @@ def fetch_matters(cutoff):
     return all_matters
 
 
-def fetch_matter_text(matter_id, matter_guid):
-    """
-    Scrapes the full matter body text from the legislation detail web page.
-    The /Matters/{id}/Texts API endpoint returns 405 for Sonoma County.
-    Anchors on 'To: Sonoma County' or 'Department or Agency' to find the
-    start of the body, then returns up to 8000 chars of plain text.
-    """
-    if not matter_guid:
-        return ""
-    url = (
-        f"https://sonoma-county.legistar.com/LegislationDetail.aspx"
-        f"?ID={matter_id}&GUID={matter_guid}&Options=ID%7CText%7C&Search="
-    )
-    try:
-        resp = requests.get(url, timeout=30)
-        if not resp.ok:
-            return ""
-        html = resp.text
-
-        # Find the start of the matter body using common Sonoma County anchors
-        anchor = re.search(
-            r'(To:\s*Sonoma County|Department or Agency Name|Staff Name)',
-            html, re.IGNORECASE
-        )
-        if not anchor:
-            return ""
-
-        # Walk back to the nearest tag boundary so we don't clip mid-tag
-        start = html.rfind('<', 0, anchor.start())
-        start = start if start != -1 else anchor.start()
-
-        chunk = html[start: start + 8000]
-        plain = re.sub(r'<[^>]+>', ' ', chunk)          # strip HTML tags
-        plain = re.sub(r'&#?\w+;', ' ', plain)           # strip HTML entities
-        plain = re.sub(r'\s+', ' ', plain).strip()
-        return plain
-    except requests.exceptions.RequestException:
-        return ""
-
-
-def extract_staff_names(text):
-    """
-    Parse 'Staff Name and Phone Number: Alice, Bob, (707) 555-1234'
-    or   'Staff Name and Phone Number: Alice, Dept 707-565-8058; Bob, Dept 707-565-4777'
-    Returns a list of name strings only, dropping phone numbers and departments.
-    """
-    if not text:
-        return []
-    match = re.search(
-        r'Staff Names? and Phone Numbers?:\s*(.+?)(?=\s{2,}|\|[A-Z]|$)',
-        text, re.IGNORECASE
-    )
-    if not match:
-        return []
-
-    raw = match.group(1).strip()
-    # Split on semicolons first (separates entries like "Name, Dept Phone; Name, Dept Phone")
-    entries = [e.strip() for e in raw.split(';')]
-    names = []
-    for entry in entries:
-        # The name is the first comma-separated token in each entry
-        parts = [p.strip() for p in entry.split(',')]
-        for part in parts:
-            if re.search(r'\d{3}[\s.\-]\d{3}[\s.\-]\d{4}', part):
-                break   # phone number reached — rest of this entry is noise
-            if re.match(r'^\d', part):
-                break
-            # Skip obvious department/agency words (all caps or known keywords)
-            if re.match(r'^(General Services|Emergency|Planning|County|Department)', part, re.IGNORECASE):
-                break
-            if part:
-                names.append(part)
-    return names
-
-
-def extract_relevant_parties(text):
-    """
-    Extract applicant, property owner, contractor, lessor, and similar parties
-    from the matter body text. These are the entities officials voted on behalf of,
-    which are the primary subjects for conflict-of-interest matching.
-    """
-    if not text:
-        return []
-
-    # Ordered by how commonly they appear in Sonoma County matters
-    field_patterns = [
-        r'Applicants?:\s*([^;\n]+)',
-        r'Property Owners?:\s*([^;\n]+)',
-        r'Contractors?:\s*([^;\n]+)',
-        r'Vendors?:\s*([^;\n]+)',
-        r'Lessors?:\s*([^;\n]+)',
-        r'Lessees?:\s*([^;\n]+)',
-        r'Petitioners?:\s*([^;\n]+)',
-        r'Permittees?:\s*([^;\n]+)',
-        r'Owners?:\s*([^;\n]+)',
-        r'Grantees?:\s*([^;\n]+)',
-    ]
-
-    parties = []
-    for pattern in field_patterns:
-        m = re.search(pattern, text, re.IGNORECASE)
-        if m:
-            value = m.group(1).strip().rstrip('.,;')
-            # Sanity-check: skip if it looks like a sentence rather than a name
-            if value and len(value) < 150 and value not in parties:
-                parties.append(value)
-    return parties
-
-
 def get_final_action(matter_id):
-    """
-    Returns the most relevant history entry as a dict, or None.
-    Prefers entries with a PassedFlag (actual votes) over procedural ones.
-    """
+    """Returns the most relevant history entry, preferring entries with a recorded vote."""
     history = safe_get(f"{API_URL}/Matters/{matter_id}/Histories") or []
     if not history:
         return None
 
-    # Prefer entries that have a vote result
     voted = [h for h in history if h.get("MatterHistoryPassedFlag") is not None]
     entries = voted if voted else history
-    # Take the most recent entry by date
     entries.sort(key=lambda h: h.get("MatterHistoryActionDate") or "", reverse=True)
     return entries[0]
 
 
-def get_voters(history_entry, matter_id):
+def get_event_body(event_id):
+    """Returns the meeting body name (e.g. 'Board of Supervisors')."""
+    if not event_id:
+        return ""
+    event = safe_get(f"{API_URL}/Events/{event_id}")
+    if not event:
+        return ""
+    return event.get("EventBodyName", "")
+
+
+def get_individual_votes(history_entry, matter_id):
     """
-    Given a history entry, fetch voter names for the corresponding event item.
-    Matches on EventItemMatterId (not GUID — MatterHistoryGuid != EventItemGuid).
+    Returns a list of {name, outcome} dicts — one per supervisor who voted.
+    VoteValueName gives the per-person outcome: Yes, No, Abstain, etc.
     """
     if not history_entry:
         return []
@@ -212,11 +107,16 @@ def get_voters(history_entry, matter_id):
 
     items = safe_get(f"{API_URL}/Events/{event_id}/EventItems") or []
     for item in items:
-        # str() on both sides avoids silent int/str type mismatches
         if str(item.get("EventItemMatterId")) == str(matter_id):
             event_item_id = item.get("EventItemId")
             votes = safe_get(f"{API_URL}/EventItems/{event_item_id}/Votes") or []
-            return [v.get("VotePersonName", "") for v in votes if v.get("VotePersonName")]
+            return [
+                {
+                    "name":    v.get("VotePersonName", ""),
+                    "outcome": v.get("VoteValueName", ""),
+                }
+                for v in votes if v.get("VotePersonName")
+            ]
     return []
 
 
@@ -235,63 +135,52 @@ def scrape():
     with open(CSV_FILE, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow([
+            "Official Name",
+            "Vote Outcome",
             "File Number",
-            "Title",
-            "Type",
-            "Status",
-            "File Created",
-            "Final Action Date",
-            "Final Action",
-            "Result",
-            "Relevant Parties",
-            "Voters",
+            "Agenda Item Subject",
+            "Vote Date",
+            "Meeting Type",
+            "Overall Result",
             "Link",
         ])
         f.flush()
 
         total = len(matters)
         for i, matter in enumerate(matters, 1):
-            matter_id   = matter.get("MatterId")
-            matter_guid = matter.get("MatterGuid", "")
-            file_num    = matter.get("MatterFile", "")
-            title       = matter.get("MatterTitle", "")
-            m_type      = matter.get("MatterTypeName", "")
-            status      = matter.get("MatterStatusName", "")
-            intro       = (matter.get("MatterIntroDate") or "")[:10]
-            link        = f"{SITE_LINK}{matter_id}"
+            matter_id = matter.get("MatterId")
+            file_num  = matter.get("MatterFile", "")
+            title     = matter.get("MatterTitle", "")
+            link      = f"{SITE_LINK}{matter_id}"
 
             print(f"\n[{i}/{total}] {file_num} — {title[:70]}")
 
             final = get_final_action(matter_id)
             if final:
-                action_date = (final.get("MatterHistoryActionDate") or "")[:10]
-                action      = final.get("MatterHistoryActionName", "")
-                result      = final.get("MatterHistoryPassedFlagName", "")
-                voters      = get_voters(final, matter_id)
+                action_date  = (final.get("MatterHistoryActionDate") or "")[:10]
+                result       = final.get("MatterHistoryPassedFlagName", "")
+                event_id     = final.get("MatterHistoryEventId")
+                meeting_type = get_event_body(event_id)
+                votes        = get_individual_votes(final, matter_id)
             else:
-                action_date = action = result = ""
-                voters = []
+                action_date = result = meeting_type = ""
+                votes = []
 
-            text             = fetch_matter_text(matter_id, matter_guid)
-            relevant_parties = extract_relevant_parties(text)
+            print(f"  Result: {result} | Meeting: {meeting_type} | Votes: {len(votes)}")
 
-            print(f"  Action: {action} | Result: {result} | Voters: {len(voters)} | Parties: {relevant_parties}")
-
-            writer.writerow([
-                file_num,
-                title,
-                m_type,
-                status,
-                intro,
-                action_date,
-                action,
-                result,
-                ", ".join(relevant_parties),
-                ", ".join(voters),
-                link,
-            ])
-            f.flush()
-            rows_written += 1
+            for vote in votes:
+                writer.writerow([
+                    vote["name"],
+                    vote["outcome"],
+                    file_num,
+                    title,
+                    action_date,
+                    meeting_type,
+                    result,
+                    link,
+                ])
+                f.flush()
+                rows_written += 1
 
             time.sleep(SLEEP_SECONDS)
 
