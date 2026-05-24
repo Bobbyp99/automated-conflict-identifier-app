@@ -16,43 +16,52 @@ their voting/decision records.
 
 ## Setup
 
-### 1. Install dependencies
+### 1. Navigate to the backend
+
+```bash
+cd backend
+pip install -r requirements.txt
+```
+- everything from this point should be done from the backend
+
+### 2. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Start the backend
-
+### 3. Set up the virtual environment
 ```bash
+python -m venv venv
 venv\Scripts\activate
-cd backend
+```
+### SCRAPING (4-5)
+### 4. Configure the scraper fields (default is Sonoma County Board of Supervisors)
+- in webScraperLegistar.py, change "COUNTY_NAME" to desired county (default is sonoma-county)
+- in webScraperLegistar.py, edit the SITE_LINK (usually just replace the county name in the link)
+- in form700Scraper.py, change SUPERVISORS and agency (default are "Sonoma County Board of Supervisors" and "Sonoma County", respectively)
+- agency must be written the same as listed in the FPPC Form 700 Database (eg. Sacramento)
+- change destination file name is desired
+
+### 5. Run Scrapers
+- run the scrapers and see activity in the terminal and the csv files as data is being written
+
+### 6. Navigate to the virtually setup WebApp
+```bash
 uvicorn main:app --reload
 ```
+Visit **http://localhost:8000** in your browser.
 
 The API will be live at **http://localhost:8000**
 Interactive API docs at **http://localhost:8000/docs**
 
-### 3. Configure scrapers
-- in webScraperLegistar.py, change "COUNTY_NAME" to desired county (default is sonoma-county)
-- in form700Scraper.py, change SUPERVISORS and agency (default are "Sonoma County Board of Supervisors" and "Sonoma County", respectively)
-- change destination file name is desired
-
-### 4. Run Scrapers
-- run the scrapers in the terminal
-- note the destination csv files
-
-### 4. Open the app
-
-Visit **http://localhost:8000** in your browser.
-
----
-
 ## How to use
 
 1. **Upload** your interests CSV (Form 700 / Sc) and your votes/decisions CSV
-2. **Run analysis** — results are scored, tiered (High / Medium / Low), and saved to the database
-3. **Past Runs tab** — reload any previous analysis from the database
+   NOTE: If you want to upload CSVs acquired through other means, make sure they match the format of the default scraped data of Sonoma County
+   in decisions_test6.csv and income_sources2.csv
+3. **Run analysis** — results are scored, tiered (High / Medium / Low) based on the match become from Income C, B, or A respectively, and saved to the database
+4. **Past Runs tab** — reload any previous analysis from the database
 
 ---
 
