@@ -63,8 +63,18 @@ Interactive API docs at **http://localhost:8000/docs**
    in decisions_test6.csv and income_sources2.csv
 3. **Run analysis** — results are scored, tiered (High / Medium / Low) based on the match become from Income C, B, or A respectively, and saved to the database
 4. **Past Runs tab** — reload any previous analysis from the database
+   NOTE: This is where you can further analyze the matches using methods beyond the scope of this project
 
 ---
+
+## Constraints/Limitations
+- Extracts data from CSV files for the matching
+- Flags for specific counties, not entire cities–Sonoma County matches with Sonoma agenda data.
+- The Legistar scraper needs counties that use Legistar’s agenda management system as opposed to any other agenda management system
+- The Past Runs are stored on the local fppc db file (however we set up PostgresSQL as an option for you to look into if desired)
+- The matcher uses web scraping and entity matching using each decision's Legistar Page, leading to some false positives that are
+  only detectable by a human looking at it
+
 
 ## API Endpoints
 
