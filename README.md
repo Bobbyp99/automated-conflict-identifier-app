@@ -35,6 +35,7 @@ cd backend
 - everything from this point should be done from the backend
 
 ### 3. Install dependencies
+First, must download "Pip" which is a package installer for Python. Once you have Pip, write once again from the backend the following
 ```bash
 pip install -r requirements.txt
 ```
