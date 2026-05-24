@@ -1,6 +1,6 @@
 # FPPC Conflict Analyzer
 
-A web app for identifying potential conflicts of interest between
+A WebApp for identifying potential conflicts of interest between
 government employees' disclosed financial interests (Form 700) and
 their voting/decision records. There are two scrapers. One is the 
 Legistar Scraper which is uses Legistars public API to get matters
