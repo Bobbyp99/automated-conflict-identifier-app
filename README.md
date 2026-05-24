@@ -2,7 +2,15 @@
 
 A web app for identifying potential conflicts of interest between
 government employees' disclosed financial interests (Form 700) and
-their voting/decision records.
+their voting/decision records. There are two scrapers. One is the 
+Legistar Scraper which is uses Legistars public API to get matters
+voted on in a given local jurisdiction for a set time frame. The 
+second scraper is a Form 700 form scraper which uses the FPPC website.
+Both of these scrapers write data to a csv file each, and these csv
+files will be manually uploaded by the user to the WebApp, where the 
+user will then click "Run Conflict Scan" to run the matcher. From 
+there, a human can look at the matches below or navigate to the 
+"Past Runs" tab where conflict scans are stored.
 
 ## Stack
 
@@ -66,6 +74,12 @@ Interactive API docs at **http://localhost:8000/docs**
    NOTE: This is where you can further analyze the matches using methods beyond the scope of this project
 
 ---
+
+### Additional Tools
+1. conflictScanner.py
+   - this writes matches and outputs them to a csv file with the following fields:
+   "Official Name,Vote Outcome,File Number,Agenda Item Subject,Vote Date,Meeting Type,Overall Result,Entity Matched,Interest Schedule,Interest Year,Link"
+   - fields must be configured for the name of the decisions and interests files
 
 ## Constraints/Limitations
 - Extracts data from CSV files for the matching
