@@ -39,23 +39,26 @@ cd backend
 pip install -r requirements.txt
 ```
 
-### 4. Set up the virtual environment
+### 4. Create the virtual environment
 ```bash
 python -m venv venv
+```
+### 5. Activate the virtual environment
+```bash
 venv\Scripts\activate
 ```
-### SCRAPING (5-6)
-### 5. Configure the scraper fields (default is Sonoma County Board of Supervisors)
+### SCRAPING (6-7)
+### 6. Configure the scraper fields (default is Sonoma County Board of Supervisors)
 - in webScraperLegistar.py, change "COUNTY_NAME" to desired county (default is sonoma-county)
 - in webScraperLegistar.py, edit the SITE_LINK (usually just replace the county name in the link)
 - in form700Scraper.py, change SUPERVISORS and agency (default are "Sonoma County Board of Supervisors" and "Sonoma County", respectively)
 - agency must be written the same as listed in the FPPC Form 700 Database (eg. Sacramento)
 - change destination file name is desired
 
-### 6. Run Scrapers
+### 7. Run Scrapers
 - run the scrapers and see activity in the terminal and the csv files as data is being written
 
-### 7. Navigate to the virtually setup WebApp
+### 8. Navigate to the virtually setup WebApp
 ```bash
 uvicorn main:app --reload
 ```
